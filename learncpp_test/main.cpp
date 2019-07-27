@@ -1,50 +1,34 @@
 #include "header.h"
+#include "randomMonsterGenerator.h"
 
-class Fruit
+void sortArr(array<int,g_arrayElements> &arr)
 {
-public:
-	// Note: we've moved FruitType inside the class, under the public access specifier
-	enum FruitType
+	for(int si = 0;si < g_arrayElements-1;si++)
 	{
-		APPLE,
-		BANANA,
-		CHERRY
-	};
-    
-    enum FruitTaste
-    {
-        SWEET,
-        SOUR,
-        FRAGRANT
-    };
+		int min = si;
 
-private:
-	FruitType m_type;
-    FruitTaste m_taste;
-	int m_percentageEaten = 0;
-  
-public:
- 
-	Fruit(FruitType type,FruitTaste taste):m_type(type),m_taste(taste){}
- 
-	FruitType getType() { return m_type;  }
-    FruitTaste getTaste() { return m_taste; }
-	int getPercentageEaten() { return m_percentageEaten;  }
-};
- 
+		for(int ci = si+1;ci < g_arrayElements; ci++ )
+		{
+			if(arr[ci] < arr[si])
+				min = ci;
+		}
+	
+
+	swap(arr[si], arr[min]);
+	}
+}
+
+
+double dist2(Pnt2d &p1,Pnt2d &p2)
+{   return sqrt(pow((p1.m_x - p2.m_x),2)+pow((p1.m_y - p2.m_y),2));    }
+
 int main()
 {
-	// Note: we access the FruitType via Fruit now
-	Fruit apple(Fruit::APPLE,Fruit::SWEET);
-	
-	if (apple.getType() == Fruit::APPLE)
-		std::cout << "I am an apple\n";
-	else
-		std::cout << "I am not an apple\n";
+	Timer t;
 
-	if (apple.getTaste() == Fruit::SWEET)
-		std::cout << "It's sweet\n";
-	else
-		std::cout << "It's not sweet\n";
+	RMG Bones(RMG::SKELETON,"Bones","haha",3);
+
+	Bones.prt(Bones);
+
 	return 0;
 }
