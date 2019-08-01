@@ -241,15 +241,27 @@ class Blackjack
 		}
 
 };
-/* 
 
- 
+void playBlackjack()
+{
+	int r = 0;
+	while(true)
+	{
+		assert (r < 3);
+		Blackjack round;
+		cout << "Round" << ++r << endl;
 
- 
+		if(round.play())
+			cout << "U won!"<<endl;
+		else
+			cout << "boooo!"<<endl;
 
- 
+		char again;
+		cout<<"Again?(Enter a again)"<<endl;
+		cin >> again;
+		if(again != 'a')
+			break;
+	}
+}
 
- 
-
-*/
 #endif
