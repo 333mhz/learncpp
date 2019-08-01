@@ -9,6 +9,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <cassert> // for assert()
 
 using namespace std;
 

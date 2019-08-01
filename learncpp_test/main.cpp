@@ -11,18 +11,30 @@ int main()
 {
 	Timer t;
 
-	srand(static_cast<unsigned int>(time(0))); // set initial seed value to system clock
+	//srand(static_cast<unsigned int>(time(0))); // set initial seed value to system clock
 
     //rand(); // If using Visual Studio, discard first random value
 	
-	Deck deck;
+	//Deck deck;
 
-    deck.prtDeck();
+    //deck.prtDeck();
 
-	deck.shuffleDeck();
+	//deck.shuffleDeck();
 
-	deck.prtDeck();
+	//deck.prtDeck();
 
+	//cout << "1st: " << deck.deal().getCardValue() << endl;
+	//cout << "2st: "	<< deck.deal().getCardValue() << endl;
+
+	Blackjack round1;
+
+	if(round1.play())
+		cout << "U won!"<<endl;
+	else
+		cout << "boooo!"<<endl;
+	
+	
 	cout << "Process Time: " << t.elapsed() <<endl;
+
 	return 0;
 }

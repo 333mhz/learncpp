@@ -101,7 +101,7 @@ class Deck
 {
 	private:
 	array<pokeCard, 54> m_deck;
-	
+	int m_Idx = 0;
 	
 	static int getRandomNumber(int min, int max)
 	{
@@ -147,6 +147,7 @@ class Deck
 	
 	void shuffleDeck()
 	{
+		srand(static_cast<unsigned int>(time(0)));
 	// Step through each card in the deck
 		for (int index = 0; index < 52; ++index)
 		{
@@ -156,9 +157,90 @@ class Deck
 			swap(m_deck[index], m_deck[swapIndex]);
 		}
 	}
+
+	const pokeCard& deal()
+	{
+		assert(m_Idx < 52);
+		return m_deck[m_Idx++];
+	}
     
 };
 
+class Blackjack
+{
+	private:
+	
+	Deck deck;
+
+	public:
+	Blackjack()
+	{
+		deck.shuffleDeck();
+		deck.prtDeck();
+
+		cout << "Initialized,BlackJack!!!" << endl;
+	}
+
+	bool hitOrStand()
+	{
+		std::cout << "(h) to hit, or (s) to stand: ";
+		char choice;
+		do
+		{
+			std::cin >> choice;
+		} while (choice != 'h' && choice != 's');
+
+		if(choice == 's')
+			return true;
+		else
+			return false;
+	}
+
+	bool play()
+	{
+		// Set up the initial game state
+		const pokeCard *cardPtr = &deck.deal();
+
+		int playerTotal = 0;
+		int dealerTotal = 0;
+ 
+		// Deal the dealer one card
+		dealerTotal += (*cardPtr++).getCardValue();
+		std::cout << "The dealer is showing: " << dealerTotal << '\n';
+ 
+		// Deal the player two cards
+		playerTotal += (*cardPtr++).getCardValue();
+		playerTotal += (*cardPtr++).getCardValue();
+ 
+		// Player goes first
+		while (1)
+		{
+			std::cout << "You have: " << playerTotal << '\n';
+			if (hitOrStand())
+				break;
+ 
+			playerTotal += (*cardPtr++).getCardValue();
+		
+			// See if the player busted
+			if (playerTotal > 21)
+				return false;
+		}
+ 
+		// If player hasn't busted, dealer goes until he has at least 17 points
+		while (dealerTotal < 17)
+		{
+			dealerTotal += (*cardPtr++).getCardValue();
+			std::cout << "The dealer now has: " << dealerTotal << '\n';
+		}
+ 
+		// If dealer busted, player wins
+		if (dealerTotal > 21)
+			return true;
+ 
+		return (playerTotal > dealerTotal);
+		}
+
+};
 /* 
 
  
@@ -166,61 +248,8 @@ class Deck
  
 
  
-char getPlayerChoice()
-{
-	std::cout << "(h) to hit, or (s) to stand: ";
-	char choice;
-	do
-	{
-		std::cin >> choice;
-	} while (choice != 'h' && choice != 's');
-	
-	return choice;
-}
+
  
-bool playBlackjack(const std::array<Card, 52> deck)
-{
-	// Set up the initial game state
-	const Card *cardPtr = &deck[0];
- 
-	int playerTotal = 0;
-	int dealerTotal = 0;
- 
-	// Deal the dealer one card
-	dealerTotal += getCardValue(*cardPtr++);
-	std::cout << "The dealer is showing: " << dealerTotal << '\n';
- 
-	// Deal the player two cards
-	playerTotal += getCardValue(*cardPtr++);
-	playerTotal += getCardValue(*cardPtr++);
- 
-	// Player goes first
-	while (1)
-	{
-		std::cout << "You have: " << playerTotal << '\n';
-		char choice = getPlayerChoice();
-		if (choice == 's')
-			break;
- 
-		playerTotal += getCardValue(*cardPtr++);
-		
-		// See if the player busted
-		if (playerTotal > 21)
-			return false;
-	}
- 
-	// If player hasn't busted, dealer goes until he has at least 17 points
-	while (dealerTotal < 17)
-	{
-		dealerTotal += getCardValue(*cardPtr++);
-		std::cout << "The dealer now has: " << dealerTotal << '\n';
-	}
- 
-	// If dealer busted, player wins
-	if (dealerTotal > 21)
-		return true;
- 
-	return (playerTotal > dealerTotal);
-}
+
 */
 #endif
