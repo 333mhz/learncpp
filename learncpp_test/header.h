@@ -45,45 +45,4 @@ class Timer
 };
 
 
-class Pnt2d
-{
-    private:
-    double m_x;
-    double m_y;
-
-    public:
-    //Pnt2d(double x = 0.0, double y = 0.0):m_x(x),m_y(y){}
-    Pnt2d(double x = 0.0, double y = 0.0):m_x(x),m_y(y){}
-	~Pnt2d()
-	{
-		delete this;
-	}
-    void prt() const
-    {
-        cout << "Point2d(" << this->m_x <<", "<<this->m_y<<")\n";
-
-    }
-
-    //double dist2(Pnt2d &other)
-    //{   return sqrt(pow((this->m_x - other.m_x),2)+pow((this->m_y - other.m_y),2));    }
-    friend double dist2(Pnt2d &p1,Pnt2d &p2);
-};
-
-void sortArr(array<int,g_arrayElements> &arr)
-{
-	for(int si = 0;si < g_arrayElements-1;si++)
-	{
-		int min = si;
-
-		for(int ci = si+1;ci < g_arrayElements; ci++ )
-		{
-			if(arr[ci] < arr[si])
-				min = ci;
-		}
-	
-
-	swap(arr[si], arr[min]);
-	}
-}
-
 #endif
