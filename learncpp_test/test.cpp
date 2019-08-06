@@ -15,25 +15,19 @@
 
 int main()
 {
+	GradeMap grades;
 
-	// Cents cents1(7);
-	// Cents cents2(8);
-	// Cents cents3(9);
-	// Cents centsSum = cents1 - cents2 + cents3;
-	// std::cout << "I have " << centsSum.getCents() << " cents." << std::endl;
+	char& gradeJoe = grades["Joe"]; // does a push_back
 
-	Fraction f1(6,8);
-	Fraction f2;
-	cin >> f2;
-	Fraction fx = - f1 * f2 * 7;
+	gradeJoe = 'A';
 
-	cout << f1 << " x " << f2 << " x 7 "<< " = " << fx ;
+	char& gradeFrank = grades["Frank"]; // does a push_back
 
-	fx = - fx;
-	cout << fx;
+	gradeFrank = 'C';
 
-	fx = + fx;
-	cout << fx;
+	std::cout << "Joe has a grade of " << grades["Joe"] << '\n';
+
+	std::cout << "Frank has a grade of " << grades["Frank"] << '\n';
 
 	return 0;
 }
