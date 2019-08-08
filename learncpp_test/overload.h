@@ -3,8 +3,25 @@
 
 #include "header.h"
 
-class cents
+class Cents
 {
+    private:
+    int m_cents;
+    public:
+    Cents(int cents = 0):m_cents(cents){}
+
+    operator int() const { return m_cents; }
+
+};
+
+class Dollars
+{
+    private:
+    int m_dollars;
+    public:
+    Dollars(int d = 0):m_dollars(d){}
+
+    operator Cents() const {return Cents(m_dollars * 8);}
 
 };
 
@@ -17,7 +34,13 @@ class Fraction
     public:
     Fraction(int n = 0, int d = 1):m_nume(n), m_deno(d)
     {
+        assert(m_deno != 0);
         reduc();
+    }
+
+    Fraction(const Fraction &f):m_nume(f.m_nume), m_deno(f.m_deno)
+    {
+        cout << "Copy that->";
     }
 
     void prt() const
@@ -48,6 +71,15 @@ class Fraction
         return m_deno;
     }
 
+    void setNume(int n)
+    {
+        m_nume = n;
+    }
+
+    void setDeno(int d)
+    {
+        m_deno = d;
+    }
     //Fraction operator*(const Fraction &f1, const Fraction &f2);
     Fraction operator*(int a)
     {
@@ -84,6 +116,10 @@ class Fraction
         m_deno /= g ;
     }
 
+    operator double() const 
+    {
+        return (static_cast<double>(m_nume)/static_cast<double>(m_deno));
+    }
 
 };
 
@@ -231,5 +267,90 @@ class GradeMap
 
     //friend ostream& operator<<(ostream& out, const GradeMap &g)
 
+};
+
+class Matrix
+{
+    private:
+    double data[4][4];
+
+    public:
+    Matrix()
+    {
+        //
+        for(int x=0;x<4;x++)
+        for(int y=0;y<4;y++)
+        data[x][y] = 0.0;
+    }
+
+    double& operator()(int x, int y)
+    {
+        assert(x >= 0 && x <=4);
+        assert(y >= 0 && y <=4);
+        return data[x][y];
+    }
+
+    const double& operator()(int x, int y) const
+    {
+        assert(x >= 0 && x <=4);
+        assert(y >= 0 && y <=4);
+        return data[x][y];
+    }
+
+    void operator()()
+    {
+        for(int x=0;x<4;x++)
+        for(int y=0;y<4;y++)
+        data[x][y] = 0.0;
+    }
+};
+
+class Accumulator
+{
+    private:
+    int m_counter =0;
+
+    public:
+    Accumulator(){}
+
+    int operator()(int i){return(m_counter += i);}  
+};
+
+class Mystring
+{
+    private:
+    string m_string;
+
+    public:
+    Mystring(const string str01):m_string(str01){}
+
+    string operator()(int s,int l)
+    {
+        assert(s >= 0 && s+l <= m_string.length() && "Mystring: Substring out of range" );
+        string p;
+        for (int c = 0;c<l;c++)
+        p += m_string[s+c];
+        return p;
+    }
+};
+
+class MyString
+{
+    private:
+    string m_string;
+    public:
+    MyString(int x)
+    {
+        m_string.resize(x);
+    }
+    MyString(const char *string)
+    {
+        m_string = string;
+    }
+    friend ostream& operator<<(ostream& out,const MyString &s)
+    {
+        out << s.m_string;
+        return out;
+    }
 };
 #endif
