@@ -329,23 +329,23 @@ class Accumulator
     int operator()(int i){return(m_counter += i);}  
 };
 
-class Mystring
-{
-    private:
-    string m_string;
+// class Mystring
+// {
+//     private:
+//     string m_string;
 
-    public:
-    Mystring(const string str01):m_string(str01){}
+//     public:
+//     Mystring(const string str01):m_string(str01){}
 
-    string operator()(int s,int l)
-    {
-        assert(s >= 0 && s+l <= m_string.length() && "Mystring: Substring out of range" );
-        string p;
-        for (int c = 0;c<l;c++)
-        p += m_string[s+c];
-        return p;
-    }
-};
+//     string operator()(int s,int l)
+//     {
+//         assert(s >= 0 && s+l <= m_string.length() && "Mystring: Substring out of range" );
+//         string p;
+//         for (int c = 0;c<l;c++)
+//         p += m_string[s+c];
+//         return p;
+//     }
+// };
 
 class MyString
 {
@@ -395,7 +395,32 @@ class MyString
     char* getString(){return m_data;}
     int getLength(){return m_length;}
 
-    void deepCopy(const MyString& str)
+    void deepCopy(const MyString& str);
 };
 
+class Average
+{
+    private:
+    int32_t m_sum;
+    int8_t  m_many;
+
+    public:
+    Average(int32_t s = 0,int8_t m = 0):m_sum(s),m_many(m)
+    {
+        assert(m >= 0);
+    }
+
+    friend ostream& operator<<(ostream& out, const Average a)
+    {
+        out << "Average: " << static_cast<double>(a.m_sum)/a.m_many;
+        return out;
+    }
+    Average& operator+=(int n)
+    {
+        m_sum += n;
+        ++m_many;
+
+        return *this;
+    }
+};
 #endif
