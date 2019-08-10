@@ -11,6 +11,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <cassert> // for assert()
+#include <cstring> // for strlen()
 
 using namespace std;
 

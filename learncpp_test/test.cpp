@@ -23,10 +23,23 @@ Fraction mkNega(Fraction f)
 
 	return f;
 }
+
+void myString01()
+{
+	MyString alex("alex");
+	cout << alex;
+	MyString employee;
+	employee = alex;
+	cout << employee;
+}
+void myString02()
+{
+	MyString alex("alex");
+	alex = alex;
+	cout << alex;
+}
 int main()
 {
-	MyString ms = 'x';
-
-	cout << ms;
+	myString02();
 	return 0;
 }

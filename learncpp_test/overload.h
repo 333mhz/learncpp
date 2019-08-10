@@ -120,7 +120,20 @@ class Fraction
     {
         return (static_cast<double>(m_nume)/static_cast<double>(m_deno));
     }
+    
+    Fraction& operator=(const Fraction &f)
+    {
+        if(this == &f)
+            return *this;
+        m_nume = f.m_nume;
+        m_deno = f.m_deno;  
 
+        return *this;   
+    }
+    // Forbid Copy constructor
+    //Fraction(const Fraction &copy) = delete;
+    // Forbid Overloaded assignment
+    //Fraction& operator= (const Fraction &fraction) = delete; // no copies through assignment!
 };
 
 class Car
@@ -337,20 +350,52 @@ class Mystring
 class MyString
 {
     private:
-    string m_string;
+    char* m_data;
+    int m_length;
+
     public:
-    MyString(int x)
+    MyString(const char *d = "")
     {
-        m_string.resize(x);
+        assert(d);
+
+        m_length = strlen(d)+1;
+        m_data = new char[m_length];
+
+        for(int i = 0;i < m_length ;i++)
+            m_data[i] = d[i];  
     }
-    MyString(const char *string)
+
+    ~MyString()
     {
-        m_string = string;
+        delete[] m_data;
     }
-    friend ostream& operator<<(ostream& out,const MyString &s)
+
+    MyString& operator=(const MyString &ms)
     {
-        out << s.m_string;
+        if(this == &ms)
+            return *this;
+        if(m_data)
+            delete[] m_data;
+
+        m_length = strlen(ms.m_data) + 1;
+        m_data = new char[m_length];
+
+        for(int i = 0;i < m_length;i++)
+            m_data[i] = ms.m_data[i];
+
+        return *this;
+    }
+
+    friend ostream& operator<<(ostream& out,const MyString &ms)
+    {
+        out << ms.m_data;
         return out;
     }
+
+    char* getString(){return m_data;}
+    int getLength(){return m_length;}
+
+    void deepCopy(const MyString& str)
 };
+
 #endif
