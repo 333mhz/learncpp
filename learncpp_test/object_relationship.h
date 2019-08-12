@@ -75,10 +75,24 @@ class Teacher
 class Department
 {
     private:
-    Teacher *m_teachers;
+    vector<Teacher*> m_dept;
 
     public:
-    Department(Teacher *t = nullptr):m_teachers(t)
+    Department()
     {}
+
+    void add(Teacher *t)
+    {
+        m_dept.push_back(t);
+    }
+    friend ostream& operator<<(ostream& out,const Department &d)
+    {
+        out<<"Deptartment: ";
+        for(const auto &t : d.m_dept)
+            out<<t->getName()<<" ";
+        out<<endl;
+
+        return out;
+    }
 };
 #endif
