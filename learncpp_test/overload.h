@@ -423,4 +423,136 @@ class Average
         return *this;
     }
 };
+
+class IntArray
+{
+    private:
+    int m_num;
+    int *m_array;
+
+    public:
+    IntArray(int n = 0):m_num(n)
+    {
+        assert(n >= 0);
+        if(n == 0)
+            m_array = nullptr;
+        else
+            m_array = new int[n]; 
+    }
+
+    IntArray(const IntArray &a):m_num(a.m_num)
+    {
+        delete[] m_array;
+        m_array = new int[a.m_num];
+        for(int i = 0;i < m_num;i++)
+            m_array[i] = a.m_array[i];
+    }
+
+    ~IntArray()
+    {
+        delete[] m_array; 
+    }
+
+    friend ostream& operator<<(ostream &out, const IntArray &a)
+    {
+        for(int i = 0;i < a.m_num;i++)
+            out << a.m_array[i] << ' ';
+
+        return out;
+    }
+
+    int& operator[](const int i)
+    {
+        assert(i >= 0 && i <m_num);
+
+        return m_array[i];
+    }
+
+    IntArray& operator=(const IntArray &a)
+    {
+        if(this == &a)
+            return *this;
+
+        delete[] m_array;
+
+        m_num = a.m_num;
+        m_array = new int[a.m_num];
+
+        for(int i = 0;i < a.m_num;i++)
+            m_array[i] = a.m_array[i];
+    }
+};
+
+class FixedPoint2
+{
+    private:
+    bool m_pn = true;
+    int_least16_t m_int;
+    int_least8_t m_fra;
+
+    public:
+    FixedPoint2(int_least16_t i,int_least8_t f):m_int(i),m_fra(f)
+    {
+        if(m_int < 0 || m_fra < 0)
+        {
+            m_pn = false;
+
+            if(m_int < 0)
+                m_int = - m_int;
+            if(m_fra < 0)
+                m_fra = - m_fra;
+        }    
+    }
+
+    FixedPoint2(double d)
+    {
+        if(d < 0)
+        {
+            m_pn = false;
+            d = - d;
+        } 
+
+        m_int = static_cast<int_least16_t>(d);
+        m_fra = static_cast<int_least8_t>(d*100-m_int*100);
+    }
+
+    operator double() const
+    {
+        if(m_pn)
+            return m_int + static_cast<double>(m_fra)/100;
+        else
+            return -(m_int + static_cast<double>(m_fra)/100);
+    }
+
+    friend ostream& operator<<(ostream& out,const FixedPoint2 &f)
+    {
+        out <<static_cast<double>(f);
+    
+        return out;
+    }
+
+    friend bool operator==(const FixedPoint2 &f1,const FixedPoint2 &f2)
+    {
+        return (f1.m_pn == f2.m_pn && f1.m_int == f2.m_int && f1.m_fra == f2.m_fra);
+    }
+
+    friend istream& operator>>(istream& in,FixedPoint2 &f)
+    {
+        double d;
+        in >> d;
+
+        f = FixedPoint2(d);
+
+        return in;
+    }
+
+    FixedPoint2 operator-()
+    {
+        if(!m_pn)
+            return m_int + static_cast<double>(m_fra)/100;
+        else
+            return -(m_int + static_cast<double>(m_fra)/100);
+    }
+
+};
 #endif

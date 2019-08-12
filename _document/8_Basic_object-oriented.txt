@@ -1,0 +1,512 @@
+Chapter 8
+Basic object-oriented programming
+
+[1]
+An object，defined in C++ as, 
+“a piece of memory that can be used to store values”.
+An object with a name is called a variable. 
+Process-oriented programming
+
+driveTo(you, work);
+Object-oriented programming
+
+you.driveTo(work);
+
+[2]
+Classes allow you to create your own data types that
+bundle both data and functions that work on that data.
+Data and functions inside the class are called members.
+Members of the class are selected by using the . operator
+(or -> if you’re accessing the member through a pointer).
+#include <iostream>
+
+class DateClass
+{
+
+public:
+
+    int m_year;
+
+    int m_month;
+
+    int m_day;
+
+    void print()
+
+    {
+        std::cout << m_year << "/" << m_month << "/" << m_day;
+    }
+
+};
+
+int main()
+{
+    DateClass today { 2020, 10, 14 };
+    //Data *yesterday
+    today.m_day = 16; // use member selection operator to select a member variable of the class
+
+    today.print(); // use member selection operator to call a member function of the class
+    //yesterday->print();
+    return 0;
+}
+
+[3]
+Access specifiers allow you to specify
+who can access the members of a class.
+Public members can be accessed directly by anybody.
+Private members can only be accessed by other members of the class.
+We’ll cover protected members later, when we get to inheritance.
+By default, all members of a class are private
+and all members of a struct are public.
+
+class Point3d
+
+{
+private:
+
+int m_x, m_y, m_z;
+
+public:
+
+void setValues(int x, int y, int z)
+
+{
+
+m_x = x;
+
+m_y = y;
+
+m_z = z;
+
+}
+
+[4]
+Encapsulation is the process of
+making all of your member data private,
+so it can not be accessed directly.
+This helps protect your class from misuse.
+    
+class IntArray
+
+{
+
+private:
+
+    int m_array[10]; // user can not access this directly any more
+
+public:
+
+    void setValue(int index, int value)
+
+    {
+
+        // If the index is invalid, do nothing
+
+        if (index < 0 || index >= 10)
+
+            return;
+
+        m_array[index] = value;
+
+    }
+
+};
+
+[5]
+Constructors are a special type of member function
+that allow you to initialize objects of your class.
+A constructor that takes no parameters
+(or has all default parameters) is called a default constructor.
+The default constructor is used
+if no initialization values are provided by the user.
+You should always provide at least one constructor for your classes.
+
+class Fraction
+{
+private:
+    int m_numerator;
+    int m_denominator;
+public:
+    Fraction() // default constructor
+    {
+         m_numerator = 0;
+         m_denominator = 1;
+    }
+    int getNumerator() { return m_numerator; }
+    int getDenominator() { return m_denominator; }
+    double getValue() { return static_cast<double>(m_numerator) / m_denominator; }
+};
+
+[5a]
+Member initializer lists allows you to initialize your member
+variables from within a constructor
+(rather than assigning the member variables values).
+
+class Something
+{
+private:
+    int m_value1;
+    double m_value2;
+    char m_value3;
+    float m_value4;
+public:
+    Something(int value1, double value2, char value3='c', float value4=34.6) // this line already has a lot of stuff on it
+        : m_value1(value1), // one per line, commas at end of each line
+        m_value2(value2),
+        m_value3(value3),
+        m_value4(value4)
+    {
+    }
+};
+
+[5b]
+In C++11, non-static member initialization
+allows you to directly specify default values
+for member variables when they are declared.
+
+class Rectangle
+{
+private:
+    double m_length = 1.0; // m_length has a default value of 1.0
+    double m_width = 1.0; // m_width has a default value of 1.0
+public:
+    Rectangle()
+    {
+    // This constructor will use the default values above since they aren't overridden here
+    }
+    void print()
+    {
+        std::cout << "length: " << m_length << ", width: " << m_width << '\n';
+    }
+};
+
+[6]
+Prior to C++11, constructors should not call other constructors
+(it will compile, but will not work as you expect).
+In C++11, constructors are allowed to call other constructors
+(called delegating constructors, or constructor chaining).
+
+Prior:
+class Foo
+{
+public:
+    Foo()
+    {
+        // code to do A
+    }
+    Foo(int value)
+    {
+        // code to do A
+        // code to do B
+    }
+};
+
+C++11:
+class Employee
+{
+private:
+    int m_id;
+    std::string m_name;
+public:
+    Employee(int id=0, const std::string &name=""):
+        m_id(id), m_name(name)
+    {
+        std::cout << "Employee " << m_name << " created.\n";
+    }
+    // Use a delegating constructors to minimize redundant code
+    Employee(const std::string &name) : Employee(0, name) { }
+};
+
+[7]
+Destructors are another type of special member function
+that allow your class to clean up after itself.
+Any kind of deallocation or shutdown routines
+should be executed from here.
+
+class Simple
+{
+private:
+    int m_nID;
+public:
+    Simple(int nID)
+    {
+        std::cout << "Constructing Simple " << nID << '\n';
+        m_nID = nID;
+    }
+    ~Simple()
+    {
+        std::cout << "Destructing Simple" << m_nID << '\n';
+    }
+    int getID() { return m_nID; }
+};
+int main()
+{
+    // Allocate a Simple on the stack
+    Simple simple(1);
+    std::cout << simple.getID() << '\n';
+    // Allocate a Simple dynamically
+    Simple *pSimple = new Simple(2);
+    std::cout << pSimple->getID() << '\n';
+    delete pSimple;
+    return 0;
+} // simple goes out of scope here
+
+[8]
+All member functions have a hidden *this pointer
+that points at the class object being modified.
+Most of the time you will not need
+to access this pointer directly.
+But you can if you need to.
+
+class Something
+{
+private:
+    int data;
+public:
+    Something(int data)
+    {
+        //explicitly
+        this->data = data;
+        // this->data is the member, data is the local parameter
+    }
+};
+
+However, if we make each function return *this,
+we can chain the calls together.
+Here is the new version of Calc with “chainable” functions:
+
+class Calc
+{
+private:
+    int m_value;
+public:
+    Calc() { m_value = 0; }
+    Calc& add(int value) { m_value += value; return *this; }
+    Calc& sub(int value) { m_value -= value; return *this; }
+    Calc& mult(int value) { m_value *= value; return *this; }
+    int getValue() { return m_value; }
+};
+
+Note that add(), sub() and mult()
+are now returning *this. Consequently,
+this allows us to do the following:
+
+#include <iostream>
+int main()
+{
+    Calc calc;
+    calc.add(5).sub(3).mult(4);
+    std::cout << calc.getValue() << '\n';
+    return 0;
+}
+
+[9]
+It is good programming style to put your class definitions
+in a header file of the same name as the class,
+and define your class functions in a .cpp file
+of the same name as the class.
+This also helps avoid circular dependencies.
+
+//no sample
+
+[10]
+Member functions can (and should) be made const
+if they do not modify the state of the class.
+Const class objects can only call const member functions.
+
+class Date
+{
+private:
+    int m_year;
+    int m_month;
+    int m_day;
+public:
+    Date(int year, int month, int day)
+    {
+        setDate(year, month, day);
+    }
+    // setDate() cannot be const, modifies member variables
+    void setDate(int year, int month, int day)
+    {
+        m_year = year;
+        m_month = month;
+        m_day = day;
+    }
+    // The following getters can all be made const
+    int getYear() const { return m_year; }
+    int getMonth() const { return m_month; }
+    int getDay() const { return m_day; }
+};
+
+void printDate(const Date &date)
+{
+    std::cout << date.getYear() << "/" << date.getMonth() << "/" << date.getDay() << '\n';
+}
+
+[11]
+Static member variables are shared
+among all objects of the class.
+Although they can be accessed from a class object,
+they can also be accessed directly
+via the scope resolution operator.
+
+int generateID()
+{
+    static int s_id = 0;
+    return ++s_id;
+}
+int main()
+{
+    std::cout << generateID() << '\n';
+    std::cout << generateID() << '\n';
+    std::cout << generateID() << '\n';
+    return 0;
+}
+
+[12]
+Similarly, static member functions are member functions
+that have no *this pointer.
+They can only access static member variables.
+
+no sample
+
+Static member functions can also be defined
+outside of the class declaration.
+
+class IDGenerator
+{
+private:
+    static int s_nextID; // Here's the declaration for a static member
+public:
+     static int getNextID(); // Here's the declaration for a static function
+};
+// Here's the definition of the static member outside the class.  Note we don't use the static keyword here.
+// We'll start generating IDs at 1
+int IDGenerator::s_nextID = 1;
+
+[13]
+Friend functions are functions
+that are treated like member functions of the class
+(and thus can access a class’s private data directly).
+Friend classes are classes where all members
+of the class are considered friend functions.
+
+class Vector3d;
+// first, we need to tell the compiler that a class named Vector3d exists
+
+class Point3d
+{
+private:
+    double m_x, m_y, m_z;
+public:
+    Point3d(double x = 0.0, double y = 0.0, double z = 0.0)
+        : m_x(x), m_y(y), m_z(z)
+    {}
+    void print()
+    {
+        std::cout << "Point(" << m_x << " , " << m_y << " , " << m_z << ")\n";
+    }
+    void moveByVector(const Vector3d &v); // so we can use Vector3d here
+// note: we can't define this function here, because Vector3d hasn't been declared yet (just forward declared)
+};
+class Vector3d
+{
+private:
+    double m_x, m_y, m_z;
+public:
+    Vector3d(double x = 0.0, double y = 0.0, double z = 0.0)
+        : m_x(x), m_y(y), m_z(z)
+    {}
+    void print()
+    {
+        std::cout << "Vector(" << m_x << " , " << m_y << " , " << m_z << ")\n";
+    }
+    friend void Point3d::moveByVector(const Vector3d &v); // Point3d::moveByVector() is now a friend of class Vector3d
+};
+// Now that Vector3d has been declared, we can define the function Point3d::moveByVector()
+void Point3d::moveByVector(const Vector3d &v)
+{
+    m_x += v.m_x;
+    m_y += v.m_y;
+    m_z += v.m_z;
+}
+int main()
+{
+    Point3d p(1.0, 2.0, 3.0);
+    Vector3d v(2.0, 2.0, -3.0);
+    p.print();
+    p.moveByVector(v);
+    p.print();
+    return 0;
+}
+
+[14]
+It’s possible to create anonymous class objects
+for the purpose of evaluation in an expression,
+or passing or returning a value.
+
+class Cents
+{
+private:
+    int m_cents;
+public:
+    Cents(int cents) { m_cents = cents; }
+    int getCents() const { return m_cents; }
+};
+Cents add(const Cents &c1, const Cents &c2)
+{
+    return Cents(c1.getCents() + c2.getCents()); // return anonymous Cents value
+}
+int main()
+{
+    Cents cents1(6);
+    Cents cents2(8);
+    std::cout << "I have " << add(cents1, cents2).getCents() << " cents." << std::endl; // print anonymous Cents value
+    return 0;
+}
+
+[15]
+You can also nest types within a class.
+This is often used with enums related to the class,
+but can be done with other types
+(including other classes) if desired.
+
+class Fruit
+{
+public:
+    // Note: we've moved FruitType inside the class, under the public access specifier
+    enum FruitType
+    {APPLE,BANANA,CHERRY};
+    enum FruitTaste
+    {SWEET,SOUR,FRAGRANT};
+private:
+    FruitType m_type;
+    FruitTaste m_taste;
+    int m_percentageEaten = 0;
+public:
+    Fruit(FruitType type,FruitTaste taste):
+    m_type(type),
+    m_taste(taste)
+    {}
+    FruitType getType() { return m_type;  }
+    FruitTaste getTaste() { return m_taste; }
+    int getPercentageEaten() { return m_percentageEaten;  }
+};
+int main()
+{
+    // Note: we access the FruitType via Fruit now
+    Fruit apple(Fruit::APPLE);
+    
+    if (apple.getType() == Fruit::APPLE)
+        std::cout << "I am an apple";
+    else
+        std::cout << "I am not an apple";
+        
+    if (apple.getTaste() == Fruit::SWEET)
+        std::cout << "It's sweet\n";
+    else
+        std::cout << "It's not sweet\n";
+        
+    return 0;
+}
+
