@@ -4,7 +4,6 @@
 
 int main()
 {
-	patAndDoc();
-	CarNDrv();
+	intArr();
 	return 0;
 }
