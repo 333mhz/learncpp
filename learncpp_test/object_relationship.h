@@ -95,4 +95,86 @@ class Department
         return out;
     }
 };
+class Patient;
+class Doctor
+{
+    private:
+    string m_name{};
+    vector<Patient*> m_pat{};
+
+    public:
+    Doctor(string n):m_name(n){}
+
+    void addPat(Patient *p);
+    
+    friend ostream& operator<<(ostream& out,const Doctor& doc);
+
+    string getName()const{return m_name;}
+};
+
+class Patient
+{
+    private:
+    string m_name{};
+    vector<Doctor*> m_doc{};
+
+    void addDoc(Doctor *d)
+    {
+        m_doc.push_back(d);
+    }
+
+    public:
+    Patient(string n):m_name(n)
+    {}
+
+    friend ostream& operator<<(ostream& out,const Patient &p);
+
+    friend void Doctor::addPat(Patient* p);
+
+    string getName()const{return m_name;}
+};
+class Car
+{
+    private:
+    string m_name;
+    int m_id;
+
+    public:
+    Car(string n,int id):m_name(n),m_id(id)
+    {}
+
+    string getName(){return m_name;}
+    int getid(){return m_id;}
+};
+
+class CarLot
+{
+    private:
+    static Car s_carlot[4];
+
+    public:
+    CarLot()=delete;
+    static Car* getCar(int id)
+    {
+        for(int i = 0;i < 4;i++)
+        if(s_carlot[i].getid() == id)
+        return &(s_carlot[i]);
+
+        return nullptr;
+    }
+};
+
+class Driver
+{
+    private:
+    string m_name;
+    int m_carid;
+
+    public:
+    Driver(string n,int ci):m_name(n),m_carid(ci)
+    {}
+
+    string getName()const{return m_name;}
+    int getCarid()const{return m_carid;}
+};
 #endif
