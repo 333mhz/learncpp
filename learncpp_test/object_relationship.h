@@ -199,7 +199,17 @@ public:
         else
             m_data = nullptr;
     }
- 
+    
+    IntArray(const initializer_list<int> &list):IntArray(static_cast<int>(list.size()))
+    {
+            int count = 0;
+            for(auto &e : list)
+            {
+                m_data[count] = e;
+                count++;
+            }
+    }
+
     ~IntArray()
     {
         delete[] m_data;
@@ -215,12 +225,36 @@ public:
         m_length = 0;
     }
  
+    IntArray(const IntArray&) = delete; // to avoid shallow copies
+	IntArray& operator=(const IntArray& list) = delete; // to avoid shallow copies
+
     int& operator[](int index)
     {
         assert(index >= 0 && index < m_length);
         return m_data[index];
     }
- 
+    
+    IntArray& operator=(const initializer_list<int> &list)
+    {
+        int length = static_cast<int>(list.size());
+
+        if(length != m_length)
+        {
+            erase();
+            m_length = length;
+            m_data = new int[length];
+        }
+
+        int count = 0;
+        for(auto &e : list)
+        {
+            m_data[count] = e;
+            count++;
+        }
+        
+        return *this;
+    }
+
     // reallocate resizes the array.  Any existing elements will be destroyed.  This function operates quickly.
     void reallocate(int newLength)
     {
@@ -341,4 +375,5 @@ public:
  
     int getLength() { return m_length; }
 };
+
 #endif

@@ -168,4 +168,20 @@ void intArr()
     // Print out all the numbers
     for (int j=0; j<array.getLength(); j++)
         std::cout << array[j] << " ";
+
+    IntArray arr{1,2,3,4,5};
+    for (int j=0; j<arr.getLength(); j++)
+        std::cout << arr[j] << " ";
+
+    cout << endl;
+    IntArray arra { 5, 4, 3, 2, 1 }; // initializer list
+	for (int count = 0; count < arra.getLength(); ++count)
+		std::cout << arra[count] << ' ';
+ 
+	std::cout << '\n';
+ 
+	arra = { 1, 3, 5, 7, 9, 11 };
+ 
+	for (int count = 0; count < arra.getLength(); ++count)
+		std::cout << arra[count] << ' ';
 }

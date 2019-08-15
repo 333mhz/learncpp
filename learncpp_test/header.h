@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <cassert> // for assert()
 #include <cstring> // for strlen()
+#include <initializer_list> // for std::initializer_list
 
 using namespace std;
 
