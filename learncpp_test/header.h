@@ -46,6 +46,24 @@ class Timer
 
 	}
 };
-
+class Random
+{
+private:
+	int m_min;
+	int m_max;
+public:
+	Random(int min,int max):m_min(min),m_max(max)
+	{
+		srand(static_cast<unsigned int>(time(0)));
+		rand();
+	}
+	int getRandomNumber()
+	{
+		static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0); 
+		// static used for efficiency, so we only calculate this value once
+		// evenly distribute the random number across our range
+		return static_cast<int>(rand() * fraction * (m_max - m_min + 1) + m_min);
+	}
+};
 
 #endif
