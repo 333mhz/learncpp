@@ -247,7 +247,7 @@ class Monster:public Creature,protected Random
     static MonsterData monsterData[MAX_TYPES];
 
     mType m_type;
-    Monster(mType type)
+    Monster(mType type = SLIME)
 		: Creature(monsterData[type].name, monsterData[type].symbol, 
                    monsterData[type].health, monsterData[type].damage,
                    monsterData[type].gold), 
@@ -272,13 +272,13 @@ Monster::MonsterData Monster::monsterData[Monster::MAX_TYPES]
 	{ "slime", 's', 1, 1, 10 }
 };
 
-class SimpleGame:public Player,public Monster,public Random
+class SimpleGame:public Player,public Monster
 {
 private:
 
 public:
     SimpleGame()
-    :Player("alex"),Random(1,99)
+    :Player("alex"),Monster()
     {
         cout<< "Enter your name: (defalut: alex)\n";
         cin >> Player::m_name;
@@ -286,7 +286,8 @@ public:
     }
     bool atkMonster()
     {
-
+        if(static_cast<Random>(*this).getRandomNumber() >= 2 )
+            ;
     }
     bool atkPlayer()
     {
@@ -296,20 +297,22 @@ public:
     {
 
     }
+
     bool deadOrAlive()
     {
         cout <<"Welcome to the darkest dungeon, "<<Player::m_name <<endl;
-        while( (!static_cast<Player>(*this).isWon()) && (!static_cast<Player>(*this).isDead()) )
+        while( true )
         {
-            isFight();
+            if(static_cast<Player>(*this).isWon())
+                return true;
+            else if(static_cast<Player>(*this).isDead())
+                return false;
 
+            isFight();
         }
         //return true;
-
         return false;
     }
-
-
 };
 
 #endif
