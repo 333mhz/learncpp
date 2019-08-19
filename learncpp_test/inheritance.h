@@ -178,13 +178,7 @@ public:
     int getGold() const{  return m_gold;  }
 
     void reduceHp(int r){ m_health -= r;}
-    bool isDead()
-    {
-        if(m_health <= 0)
-            return true;
-        else
-            return false;  
-    }
+    bool isDead(){  return m_health <= 0;  }
     void addGold(int a){ m_gold += a;}
 
     friend ostream& operator<<(ostream& out,const Creature& c)
@@ -231,7 +225,7 @@ Player InitPlayer()
     Player p(name);
     return p;    
 }
-class Monster:public Creature
+class Monster:public Creature,protected Random
 {
     public:
     enum mType
@@ -250,8 +244,19 @@ class Monster:public Creature
 		int gold;
 	};
 
-    static MonsterData monsterdata[MAX_TYPES];
+    static MonsterData monsterData[MAX_TYPES];
 
+    mType m_type;
+    Monster(mType type)
+		: Creature(monsterData[type].name, monsterData[type].symbol, 
+                   monsterData[type].health, monsterData[type].damage,
+                   monsterData[type].gold), 
+                   m_type(type),
+                   Random(0,MAX_TYPES)
+	{
+        m_type = static_cast<mType>(static_cast<Random>(*this).getRandomNumber());
+    }
+    
     friend ostream& operator<<(ostream& out,const Monster& m)
     {
         out << "A "<<m.getName()<<" has "<<m.getHp() <<" health and is carrying " << m.getGold() << " gold.\n";
@@ -260,7 +265,7 @@ class Monster:public Creature
 
 };
 
-Monster::MonsterData Monster::monsterdata[Monster::MAX_TYPES]
+Monster::MonsterData Monster::monsterData[Monster::MAX_TYPES]
 {
 	{ "dragon", 'D', 20, 4, 100 },
 	{ "orc", 'o', 4, 2, 25 },
@@ -270,16 +275,39 @@ Monster::MonsterData Monster::monsterdata[Monster::MAX_TYPES]
 class SimpleGame:public Player,public Monster,public Random
 {
 private:
-    Random r;
+
 public:
     SimpleGame()
+    :Player("alex"),Random(1,99)
     {
-        
+        cout<< "Enter your name: (defalut: alex)\n";
+        cin >> Player::m_name;
+        cout << static_cast<Player>(*this);
     }
+    bool atkMonster()
+    {
 
-    void atkMonster();
-    void atkPlayer();
-    void fight();
+    }
+    bool atkPlayer()
+    {
+
+    }
+    bool isFight()
+    {
+
+    }
+    bool deadOrAlive()
+    {
+        cout <<"Welcome to the darkest dungeon, "<<Player::m_name <<endl;
+        while( (!static_cast<Player>(*this).isWon()) && (!static_cast<Player>(*this).isDead()) )
+        {
+            isFight();
+
+        }
+        //return true;
+
+        return false;
+    }
 
 
 };
