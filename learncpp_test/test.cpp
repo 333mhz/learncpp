@@ -3,14 +3,10 @@
 
 int main()
 {
-
-    Cat fred("Fred"), misty("Misty"), zeke("Zeke");
-    Dog garbo("Garbo"), pooky("Pooky"), truffle("Truffle");
- 
-    // Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
-    Animal *animals[] = { &fred, &garbo, &misty, &pooky, &truffle, &zeke };
-    for (auto animal : animals)
-        std::cout << animal->getName() << " says " << animal->speak() << '\n';
+    covariantReturnTypesD d;
+	covariantReturnTypes *b = &d;
+	d.getThis()->printType(); // calls Derived::getThis(), returns a Derived*, calls Derived::printType
+	b->getThis()->printType(); // calls Derived::getThis(), returns a Base*, calls Base::printType
     
     return 0;
 }
