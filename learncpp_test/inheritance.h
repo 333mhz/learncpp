@@ -204,6 +204,7 @@ public:
         Creature::m_attack++;
         Creature::m_health++;
         m_level++;
+        cout << "Brave "<<m_name<<"is now level "<<m_level<<endl;
     }
 
     friend ostream& operator<<(ostream& out,const Player& p)
@@ -225,7 +226,7 @@ Player InitPlayer()
     Player p(name);
     return p;    
 }
-class Monster:public Creature,protected Random
+class Monster:public Creature
 {
     public:
     enum mType
@@ -233,6 +234,7 @@ class Monster:public Creature,protected Random
         DRAGON,
         ORC,
         SLIME,
+        GOBLIN,
         MAX_TYPES
     };
     struct MonsterData
@@ -251,10 +253,9 @@ class Monster:public Creature,protected Random
 		: Creature(monsterData[type].name, monsterData[type].symbol, 
                    monsterData[type].health, monsterData[type].damage,
                    monsterData[type].gold), 
-                   m_type(type),
-                   Random(0,MAX_TYPES)
+                   m_type(type)
 	{
-        m_type = static_cast<mType>(static_cast<Random>(*this).getRandomNumber());
+        
     }
     
     friend ostream& operator<<(ostream& out,const Monster& m)
@@ -267,10 +268,17 @@ class Monster:public Creature,protected Random
 
 Monster::MonsterData Monster::monsterData[Monster::MAX_TYPES]
 {
-	{ "dragon", 'D', 20, 4, 100 },
+	{ "dragon", 'D', 16, 4, 100 },
 	{ "orc", 'o', 4, 2, 25 },
-	{ "slime", 's', 1, 1, 10 }
+	{ "slime", 's', 1, 1, 10 },
+    { "goblin", 'g', 2, 1, 15 }
 };
+
+// static Monster getRandomMonster()
+// {
+//     Random mseed(0,Monster::MAX_TYPES-1);
+//     return Monster( static_cast<Monster::mType>( mseed.getRandomNumber() ) );
+// }
 
 class SimpleGame:public Player,public Monster
 {
@@ -284,34 +292,93 @@ public:
         cin >> Player::m_name;
         cout << static_cast<Player>(*this);
     }
-    bool atkMonster()
-    {
-        if(static_cast<Random>(*this).getRandomNumber() >= 2 )
-            ;
-    }
-    bool atkPlayer()
-    {
 
-    }
-    bool isFight()
+    bool playerAttackedBy(Monster &m)
     {
+        Player::reduceHp(m.getAtk());
+        cout <<"Brave "<<Player::getName()<<" suffer "<<m.getAtk()<<"damage,\n";
+        if(static_cast<Player>(*this).isDead())
+            return true;
+        else 
+            return false;
+    }
 
+    bool playerAttack(Monster &m)
+    {
+        m.reduceHp(static_cast<Player>(*this).getAtk());
+        cout <<m.getName()<<" gain "<<Player::getAtk()<<"damage,\n";
+        if(m.isDead())
+        {
+            Player::levelUp();
+            Player::addGold(m.getGold());
+            cout << static_cast<Player>(*this);
+            return true;
+        }
+        else 
+            return false;
+    }
+    
+    int isFight(int r)
+    {
+        cout << "(R)un or (F)ight:";
+        char n = ' ';
+
+        while ( n != 'R' && n != 'F' && n != 'r' && n != 'f')
+        {
+            n = ' ';
+            cin >> n;
+        }
+
+        if( n == 'F' || n == 'f')
+        {
+            return 2;
+        }    
+        else if(r == 1)
+        {
+            cout << "Escape Failure\n";
+            return 1;
+        }
+        else
+        {
+            cout << "Escape Success\n";
+            return 0;
+        }        
     }
 
     bool deadOrAlive()
     {
-        cout <<"Welcome to the darkest dungeon, "<<Player::m_name <<endl;
+        Random mseed(0,Monster::MAX_TYPES-1);
+        cout <<"Brave "<<Player::m_name <<" enter the dungeon.\n";
+        Monster m;
         while( true )
         {
+
             if(static_cast<Player>(*this).isWon())
                 return true;
             else if(static_cast<Player>(*this).isDead())
                 return false;
 
-            isFight();
+            m = Monster( static_cast<Monster::mType>( mseed.getRandomNumber() ) );
+
+            cout << "Brave " << static_cast<Player>(*this).getName()<<" encounter "<<m.getName()<<endl;
+            
+            int fight = 1;
+            while( fight )
+            {   
+                fight = isFight(mseed.getRandomNumber());
+                if(fight == 2)
+                {
+                    if(playerAttack(m))
+                        break;
+                }
+                if(fight >= 1)
+                {
+                    if(playerAttackedBy(m))
+                        break;
+                }
+            }
+
         }
-        //return true;
-        return false;
     }
 };
 

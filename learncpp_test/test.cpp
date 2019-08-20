@@ -3,13 +3,14 @@
 
 int main()
 {
-    // SimpleGame simplegame;
+      SimpleGame simplegame;
     
-    // if(simplegame.deadOrAlive())
-    //     cout<<"Victory";
-    // else
-    //     cout<<"Game Over";
-    Monster a(Monster::mType::DRAGON);
-    cout << a;
+      if(simplegame.deadOrAlive())
+          cout<<"Victory";
+      else
+          cout<<"Game Over";
+    
+    cin.get();
+    cin.get();
     return 0;
 }
