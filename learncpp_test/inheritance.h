@@ -214,18 +214,6 @@ public:
     }
 
 };
-
-Player InitPlayer()
-{ 
-    string name;
-    while(name.size() == 0)
-    {
-        cout << "Enter your name: ";
-        cin >> name;
-    }   
-    Player p(name);
-    return p;    
-}
 class Monster:public Creature
 {
     public:
@@ -255,7 +243,6 @@ class Monster:public Creature
                    monsterData[type].gold), 
                    m_type(type)
 	{
-        
     }
     
     friend ostream& operator<<(ostream& out,const Monster& m)
@@ -305,7 +292,7 @@ public:
 
     bool playerAttack(Monster &m)
     {
-        m.reduceHp(static_cast<Player>(*this).getAtk());
+        m.reduceHp(Player::getAtk());
         cout <<m.getName()<<" gain "<<Player::getAtk()<<"damage,\n";
         if(m.isDead())
         {
@@ -333,7 +320,7 @@ public:
         {
             return 2;
         }    
-        else if(r == 1)
+        else if(r >= 1)
         {
             cout << "Escape Failure\n";
             return 1;
@@ -352,12 +339,17 @@ public:
         Monster m;
         while( true )
         {
-
             if(static_cast<Player>(*this).isWon())
+            {
+                cout <<"Total Scores: "<< Player::getGold()<<endl;
                 return true;
+            }    
             else if(static_cast<Player>(*this).isDead())
+            {
+                cout <<"Total Scores: "<< Player::getGold()<<endl;
                 return false;
-
+            }
+                
             m = Monster( static_cast<Monster::mType>( mseed.getRandomNumber() ) );
 
             cout << "Brave " << static_cast<Player>(*this).getName()<<" encounter "<<m.getName()<<endl;

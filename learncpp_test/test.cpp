@@ -1,16 +1,16 @@
 #include "header.h"
-#include "inheritance.h"
+#include "virtual_Functions.h"
 
 int main()
 {
-      SimpleGame simplegame;
+
+    Cat fred("Fred"), misty("Misty"), zeke("Zeke");
+    Dog garbo("Garbo"), pooky("Pooky"), truffle("Truffle");
+ 
+    // Set up an array of pointers to animals, and set those pointers to our Cat and Dog objects
+    Animal *animals[] = { &fred, &garbo, &misty, &pooky, &truffle, &zeke };
+    for (auto animal : animals)
+        std::cout << animal->getName() << " says " << animal->speak() << '\n';
     
-      if(simplegame.deadOrAlive())
-          cout<<"Victory";
-      else
-          cout<<"Game Over";
-    
-    cin.get();
-    cin.get();
     return 0;
 }
