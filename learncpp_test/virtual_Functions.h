@@ -3,6 +3,7 @@
 
 #include "header.h"
 
+//  Virtual functions and polymorphism
 class Animal
 {
 protected:
@@ -57,20 +58,73 @@ void furry()
 }
 //override  ,   final   ,   
 
-class covariantReturnTypes
+//  Covariant Return Types C++11
+class CRTBase
 {
 public:
 	// This version of getThis() returns a pointer to a Base class
-	virtual covariantReturnTypes* getThis() { std::cout << "called Base::getThis()\n"; return this; }
+	virtual CRTBase* getThis() { std::cout << "called Base::getThis()\n"; return this; }
 	void printType() { std::cout << "returned a Base\n"; }
 };
  
-class covariantReturnTypesD : public covariantReturnTypes
+class CRTDrerived final: public CRTBase
 {
 public:
 	// Normally override functions have to return objects of the same type as the base function
 	// However, because Derived is derived from Base, it's okay to return Derived* instead of Base*
-	virtual covariantReturnTypesD* getThis() { std::cout << "called Derived::getThis()\n";  return this; }
+	virtual CRTDrerived* getThis() { std::cout << "called Derived::getThis()\n";  return this; }
 	void printType() { std::cout << "returned a Derived\n"; }
+};
+
+//  Virtual destructors, virtual assignment, and overriding virtualization
+
+class VDBase
+{
+public:
+    virtual ~VDBase() // note: virtual
+    {
+        std::cout << "Calling ~Base()" << std::endl;
+    }
+};
+ 
+class VDDerived: public VDBase
+{
+private:
+    int* m_array;
+ 
+public:
+    VDDerived(int length)
+    {
+        m_array = new int[length];
+    }
+ 
+    virtual ~VDDerived() // note: virtual
+    {
+        std::cout << "Calling ~Derived()" << std::endl;
+        delete[] m_array;
+    }
+};
+
+//  Ignoring virtualization
+class IVBase
+{
+public:
+    virtual const char* getName() { return "Base"; }
+};
+ 
+class IVDerived: public IVBase
+{
+public:
+    virtual const char* getName() { return "Derived"; }
+};
+
+class lBind
+{
+    protected:
+    // Create a function pointer named pFcn (yes, the syntax is ugly)
+    int (*pFcn)(int, int) = nullptr;
+    
+    public:
+
 };
 #endif
