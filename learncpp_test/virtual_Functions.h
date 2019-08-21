@@ -118,13 +118,56 @@ public:
     virtual const char* getName() { return "Derived"; }
 };
 
+    
+int add(int x, int y)
+    {
+    return x + y;
+    }
+ 
+    int subtract(int x, int y)
+    {
+    return x - y;
+    }
+ 
+    int multiply(int x, int y)
+    {
+    return x * y;
+    }
+
 class lBind
 {
     protected:
     // Create a function pointer named pFcn (yes, the syntax is ugly)
     int (*pFcn)(int, int) = nullptr;
+
+    int m_x;
+    int m_y;
+    int m_o;
     
     public:
+    lBind()
+    {}
+
+    void setX(int x)
+    { m_x = x;  }
+
+    void setY(int y)
+    { m_y = y;  }
+
+    void calc(int o)
+    {
+        switch(o)
+        {
+            case 0 : pFcn = add;break;
+            case 1 : pFcn = subtract;break;
+            case 2 : pFcn = multiply;break;
+        }
+        cout << (*pFcn)(m_x,m_y) << endl;
+    }
 
 };
+
+//  The virtual table 
+
+
 #endif
