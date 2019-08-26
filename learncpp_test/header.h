@@ -13,6 +13,7 @@
 #include <cassert> // for assert()
 #include <cstring> // for strlen()
 #include <initializer_list> // for std::initializer_list
+#include <functional> // for std::reference_wrapper
 
 using namespace std;
 

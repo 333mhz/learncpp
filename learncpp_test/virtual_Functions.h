@@ -4,7 +4,7 @@
 #include "header.h"
 
 //  Virtual functions and polymorphism
-class Animal
+class Animal//abstract
 {
 protected:
     std::string m_name;
@@ -23,8 +23,13 @@ protected:
  
 public:
     const std::string& getName() { return m_name; }
-    virtual const string speak() { return m_speak; }
+    virtual const string speak()=0;
 };
+
+const string Animal::speak()  // even though it has a body
+{
+    return "???";
+}
 
 class Cat:public Animal
 {
@@ -42,7 +47,8 @@ public:
         : Animal(name)
     {
     }
-    virtual const string speak() { return "vWoam"; }
+    //virtual const string speak() { return "vWoam"; }
+    virtual const string speak() { return Animal::speak(); }
 };
 
 void furry()
@@ -169,5 +175,264 @@ class lBind
 
 //  The virtual table 
 
+class VTBase
+{
+public:
+    //FunctionPointer *__vptr;
+    //The compiler also adds a hidden pointer to the most base class that uses virtual functions. 
+    virtual void function1() {};
+    virtual void function2() {};
+};
+ 
+class VTD1: public VTBase
+{
+public:
+    virtual void function1() {};
+};
+ 
+class VTD2: public VTBase
+{
+public:
+    virtual void function2() {};
+};
 
+//  Pure virtual functions
+
+class IErrorLog//interface
+{
+    public:
+    virtual bool openLog(const char* filename) = 0;
+    virtual bool closeLog() = 0;
+    virtual bool writeErr(const char* errMsg) = 0;
+
+    virtual ~IErrorLog(){}  
+};
+
+// object slicing
+
+class sBase
+{
+protected:
+    int m_value;
+ 
+public:
+    sBase(int value)
+        : m_value(value)
+    {
+    }
+ 
+    virtual const char* getName() const { return "Base"; }
+    int getValue() const { return m_value; }
+};
+ 
+class sDerived: public sBase
+{
+public:
+    sDerived(int value)
+        : sBase(value)
+    {
+    }
+ 
+    virtual const char* getName() const { return "Derived"; }
+};
+
+void objslc01()
+{
+    sDerived derived(5);
+    std::cout << "derived is a " << derived.getName() << " and has value " << derived.getValue() << '\n';
+ 
+    sBase &ref = derived;
+    std::cout << "ref is a " << ref.getName() << " and has value " << ref.getValue() << '\n';
+ 
+    sBase *ptr = &derived;
+    std::cout << "ptr is a " << ptr->getName() << " and has value " << ptr->getValue() << '\n';
+}
+
+void objslc02()
+{
+    sDerived derived(5);
+    sBase base = derived; // what happens here?
+    std::cout << "base is a " << base.getName() << " and has value " << base.getValue() << '\n';
+}
+
+void prtObjSlc(const sBase &base) // note: base now passed by reference
+{
+    std::cout << "I am a " << base.getName() << '\n';
+}
+
+void objslc03()
+{
+    std::vector<sBase*> v;
+	
+	sBase b(5); // b and d can't be anonymous objects
+	sDerived d(6);
+ 
+	v.push_back(&b); // add a Base object to our vector
+	v.push_back(&d); // add a Derived object to our vector
+ 
+		// Print out all of the elements in our vector
+	for (int count = 0; count < v.size(); ++count)
+		std::cout << "I am a " << v[count]->getName() << " with value " << v[count]->getValue() << "\n";
+ 
+	for (int count = 0; count < v.size(); ++count)
+		delete v[count];
+} 
+
+void objslc04()
+{
+    std::vector<std::reference_wrapper<sBase> > v; // our vector is a vector of std::reference_wrapper wrapped Base (not Base&)
+	sBase b(5); // b and d can't be anonymous objects
+	sDerived d(6);
+	v.push_back(b); // add a Base object to our vector
+	v.push_back(d); // add a Derived object to our vector
+ 
+	// Print out all of the elements in our vector
+	for (int count = 0; count < v.size(); ++count)
+		std::cout << "I am a " << v[count].get().getName() << " with value " << v[count].get().getValue() << "\n"; // we use .get() to get our element from the wrapper
+}
+
+//Dynamic casting
+
+enum ClassID
+{
+	BASE,
+	DERIVED
+	// Others can be added here later
+};
+ 
+class dBase
+{
+protected:
+	int m_value;
+ 
+public:
+	dBase(int value)
+		: m_value(value)
+	{
+	}
+ 
+	virtual ~dBase() {}
+	virtual ClassID getClassID() { return BASE; }
+};
+ 
+class dDerived : public dBase
+{
+protected:
+	std::string m_name;
+ 
+public:
+	dDerived(int value, std::string name)
+		: dBase(value), m_name(name)
+	{
+	}
+ 
+	std::string& getName() { return m_name; }
+	virtual ClassID getClassID() { return DERIVED; }
+ 
+};
+ 
+dBase* getObject(bool bReturnDerived)
+{
+	if (bReturnDerived)
+		return new dDerived(1, "Apple");
+	else
+		return new dBase(2);
+}
+
+void dyncast00()
+{
+    dBase *b = getObject(true);
+ 
+        dDerived *d = dynamic_cast<dDerived*>(b); // use dynamic cast to convert Base pointer into Derived pointer
+ 
+        std::cout << "The name of the Derived is: " << d->getName() << '\n';
+ 
+	delete b;
+}
+
+void dyncast01()
+{
+    dBase *b = getObject(true);
+ 
+	if (b->getClassID() == DERIVED)
+	{
+		// We already proved b is pointing to a Derived object, so this should always succeed
+		dDerived *d = static_cast<dDerived*>(b);
+		std::cout << "The name of the Derived is: " << d->getName() << '\n';
+	}
+ 
+	delete b;
+}
+
+void dyncast02()
+{
+    dDerived apple(1, "Apple"); // create an apple
+	dBase &b = apple; // set base reference to object
+	dDerived &d = dynamic_cast<dDerived&>(b); // dynamic cast using a reference instead of a pointer
+ 
+	std::cout << "The name of the Derived is: " << d.getName() << '\n'; // we can access Derived::getName through d
+}
+
+//Printing inherited classes using operator
+class oBase
+{
+public:
+oBase() {}
+
+virtual void print() const { std::cout << "Base";  }
+
+friend std::ostream& operator<<(std::ostream &out, const oBase &b)
+{
+    return b.print(out);
+}
+
+virtual ostream& print(ostream& out) const
+{
+    out << "Base";
+    return out;
+}
+};
+
+class oDerived : public oBase
+{
+public:
+
+oDerived() {}
+
+virtual ostream& print(ostream& out) const override
+{
+    out << "Derived";
+    return out;
+}
+};
+
+void opor00()
+{
+    oBase b;
+    std::cout << b << '\n';
+    oDerived d;
+    std::cout << d << '\n';
+}
+
+void opor01()
+{
+    oDerived d;
+    oBase &bref = d;
+    std::cout << bref << '\n';
+}
+
+void opor02()
+{
+    oBase b;
+
+    std::cout << b << '\n';
+
+    oDerived d;
+
+    std::cout << d << '\n'; // note that this works even with no operator<< that explicitly handles Derived objects
+
+    oBase &bref = d;
+
+    std::cout << bref << '\n';
+}
 #endif
