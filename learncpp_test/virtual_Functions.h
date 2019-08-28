@@ -435,4 +435,109 @@ void opor02()
 
     std::cout << bref << '\n';
 }
+
+// quiz
+
+class Shape
+{
+    protected:
+    virtual ostream& print(ostream& out) const=0;
+
+    friend ostream& operator<<(ostream &out, const Shape& s) 
+    {
+        return s.print(out);
+    }
+
+    virtual ~Shape(){}
+};
+class Point
+{
+    private:
+    double m_x;
+    double m_y;
+    double m_z;
+
+    public:
+    Point(double x = 0.0,double y = 0.0,double z = 0.0):m_x(x),m_y(y),m_z(z)
+    {}
+    friend std::ostream& operator<<(std::ostream &out, const Point& p) 
+    {
+        out << "Point("<<p.m_x<<","<<p.m_y<<","<<p.m_z<<")";
+        return out;
+    } 
+};
+
+class Triangle : public Shape
+{
+    private:
+    Point m_p1;
+    Point m_p2;
+    Point m_p3;
+
+    public:
+    Triangle(Point p1,Point p2,Point p3):m_p1(p1),m_p2(p2),m_p3(p3)
+    {}
+
+    virtual ostream& print(ostream& out)  const override
+    {
+        out <<"Triangle("<<m_p1<<","<<m_p2<<","<<m_p3<<")";
+    }
+
+};
+
+class Circle : public Shape
+{
+    private:
+    Point m_p0;
+    double m_rad;
+
+    public:
+    Circle(Point p0,double rad):m_p0(p0),m_rad(rad)
+    {}
+
+    virtual ostream& print(ostream& out) const override
+    {
+        out <<"Circle("<<m_p0<<","<<"Radius:"<<m_rad<<")";
+    }
+
+    double getRad() const
+    {
+        return m_rad;
+    }
+};
+double getLargestRad(vector<Shape*> vs)
+{
+    int lr=0;
+
+    for(auto const &s :vs)
+    {
+        if(Circle *c = dynamic_cast<Circle*>(s))
+            if(c->getRad()>lr)
+                lr = c->getRad();
+    }
+    return lr;
+}
+void quiz2b()
+{
+    Circle c(Point(1, 2, 3), 7);
+    std::cout << c << '\n';
+
+    Triangle t(Point(1, 2, 3), Point(4, 5, 6), Point(7, 8, 9));
+    std::cout << t << '\n';
+}
+
+void quiz2c()
+{
+    std::vector<Shape*> v;
+
+    v.push_back(new Circle(Point(1, 2, 3), 2));
+
+    v.push_back(new Triangle(Point(1, 2, 3), Point(4, 5, 6), Point(7, 8, 9)));
+
+    v.push_back(new Circle(Point(4, 5, 6), 3));
+
+    // print each shape in vector v on its own line here
+
+       std::cout << "The largest radius is: " << getLargestRad(v) << '\n'; // write this functio
+}
 #endif

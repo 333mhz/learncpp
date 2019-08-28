@@ -1,9 +1,9 @@
 #include "header.h"
 #include "virtual_Functions.h"
 
-
 int main()
-
 {
-	opor01();
+
+    quiz2c();
+ 	
 }
