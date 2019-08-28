@@ -1,16 +1,13 @@
 #include "header.h"
-#include "func_Template.h"
-template<typename type>
-
-const type& max(const type& x,const type& y)
-{
-    return (x>y)?x:y; 
-}
+#include "func_Template.hpp"
 
 int main()
 {
+    Timer t;
     
-    double i = max(1.234,2.3456);
-    cout << i;
+    Cents array3[] = { Cents(5), Cents(10), Cents(15), Cents(14) };
+    cout << taverage(array3,4)<<endl;
 
+    std::cout << t.elapsed();
+    return 0;
 }
