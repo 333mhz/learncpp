@@ -99,7 +99,7 @@ void test01()
 		std::cout << intArray[count] << "\t" << doubleArray[count] << '\n';
 }
 
-//4
+//4 7
 template<class CType, int size>
 class StaticArray
 {
@@ -120,6 +120,13 @@ template<class CType, int size>
 CType* StaticArray<CType,size>::getArr()
 {
     return m_data;
+}
+
+template<class CType, int size>
+void prt(StaticArray<CType, size>&data)
+{
+    for(int i = 0;i<size;i++)
+        cout << data[i] <<" ";
 }
 
 void test04()
@@ -230,7 +237,40 @@ class Storarray
     }
 };
 
-template
+template<>
+class Storarray<bool,int(8)>
+{
+    private:
+    unsigned char m_data;
+
+    public:
+    Storarray():m_data(0)
+    {}
+
+     void set(int index, bool value)
+
+    {
+        // Figure out which bit we're setting/unsetting
+        // This will put a 1 in the bit we're interested in turning on/off
+        unsigned char mask = 1 << index;//00000001 << index
+        if (value)  // If we're setting a bit
+            m_data |= mask;  // Use bitwise-or to turn that bit on
+            //01010101 |= 00001000 --- 01011101
+        else  // if we're turning a bit off
+            m_data &= ~mask;  // bitwise-and the inverse mask to turn that bit off
+            //01010101 &= ~00000100 --- 01010001
+    }
+
+    bool get(int index)
+    {
+        // Figure out which bit we're getting
+        unsigned char mask = 1 << index;
+        // bitwise-and to get the value of the bit we're interested in
+        // Then implicit cast to boolean
+        return (m_data & mask);// 01010101 & 00001000 = 00000000
+    }
+    
+};
 void test06()
 {
     // Define a Storage8 for integers
@@ -244,10 +284,13 @@ void test06()
  
     // Define a Storage8 for bool
     Storarray<bool,8> boolStorage;
-    for (int count=0; count<8; ++count)
+    for (int count=7; count>-1; --count)
         boolStorage.set(count, count & 3);
  
-    for (int count=0; count<8; ++count)
+    for (int count=7; count>-1; --count)
         std::cout << (boolStorage.get(count) ? "true" : "false") << '\n';
 }
+
+// 7
+
 #endif
