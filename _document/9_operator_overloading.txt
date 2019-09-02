@@ -1,6 +1,7 @@
 Chapter 9 
 Operator overloading
 
+[1]
 Operator overloading is a variant of function overloading 
 that lets you overload operators for your classes. 
 When operators are overloaded, the intent of the operators 
@@ -10,7 +11,7 @@ If the meaning of an operator
 when applied to a custom class is not clear and intuitive, 
 use a named function instead.
 
-
+[2]
 Operators can be overloaded as a normal function, 
 a friend function, or a member function. 
 The following rules of thumb can help you determine 
