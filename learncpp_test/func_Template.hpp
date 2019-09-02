@@ -101,33 +101,72 @@ void test01()
 
 //4 7
 template<class CType, int size>
-class StaticArray
+class StaticArray_Base
 {
-    private:
+    protected:
     CType m_data[size];
 
     public:
-    CType* getArr();
+    CType* getArr(){ return m_data; }
 
     CType& operator[](int index)
     {
         return m_data[index];
     }
 
+    virtual void prt()
+    {
+        for(int i = 0;i<size;i++)
+            cout << m_data[i] <<" ";
+        
+        std::cout << std::endl;
+    }
 };
 
-template<class CType, int size>
-CType* StaticArray<CType,size>::getArr()
+template <class T, int size> // size is the expression parameter
+class StaticArray: public StaticArray_Base <T, size>
 {
-    return m_data;
-}
+public:
+	StaticArray()
+	{
+ 
+	}
+};
 
-template<class CType, int size>
-void prt(StaticArray<CType, size>&data)
+
+template <int size>
+class StaticArray<char, size>:public StaticArray_Base <char, size>
 {
-    for(int i = 0;i<size;i++)
-        cout << data[i] <<" ";
-}
+    public:
+    StaticArray()
+    {}
+    
+    //using StaticArray_Base <char, size>::m_data;
+
+    virtual void prt() override
+    {
+        //StaticArray_Base <char, size>::m_data
+	    for (int count = 0; count < size; ++count)
+		    std::cout << this->m_data[count];//???this???
+        
+        std::cout << std::endl;
+    }
+};
+
+template <int size>
+class StaticArray<double, size>:public StaticArray_Base <double, size>
+{
+    public:
+    StaticArray()
+    {}
+    virtual void prt() override
+    {
+	    for (int count = 0; count < size; ++count)
+		    std::cout << scientific << this->m_data[count]<<" ";//?
+        
+        std::cout << std::endl;
+    }
+};
 
 void test04()
 {
@@ -148,7 +187,27 @@ void test04()
     cout << endl;
 }
 
-//5
+void test07()
+{
+    // declare an integer array with room for 6 integers
+	StaticArray<int, 6> intArray;
+ 
+	// Fill it up in order, then print it
+	for (int count = 0; count < 6; ++count)
+		intArray[count] = count;
+ 
+	intArray.prt();
+ 
+	// declare a double buffer with room for 4 doubles
+	StaticArray<double, 4> doubleArray;
+ 
+	for (int count = 0; count < 4; ++count)
+		doubleArray[count] = (4.0 + 0.1 * count);
+ 
+	doubleArray.prt();
+
+}
+//5 8 
 template<class CType>
 class Storage
 {
@@ -173,24 +232,56 @@ void Storage<double>::prt()
     cout << scientific << m_val << endl;
 }
 
-template<>
-Storage<char*>::Storage(char* val)
+template<typename CT>
+class Storage<CT*>
 {
-    // Figure out how long the string in value is
-    int l = 0;
-    while(val[l] != '\0')
-        l++;
-    l++;//to account for null terminator
+    private:
+    CT* m_val;
+    public:
+    Storage(CT* val)
+    {
+            m_val = new CT(*val);
+    }
 
-    m_val = new char[l];
-    for(int i = 0;i < l;i++)
-        m_val[i] = val[i];
-}
+    ~Storage()
+    {
+        delete m_val;
+    }
+
+    void prt()
+    {
+        std::cout << *m_val <<std::endl;
+    }
+};
 
 template <>
+Storage<char*>::Storage(char* value)
+{
+	// Figure out how long the string in value is
+	int length = 0;
+	while (value[length] != '\0')
+		++length;
+	++length; // +1 to account for null terminator
+ 
+	// Allocate memory to hold the value string
+	m_val = new char[length];
+ 
+	// Copy the actual value string into the m_value memory we just allocated
+	for (int count = 0; count < length; ++count)
+		m_val[count] = value[count];
+}
+// Full specialization of destructor for type char*
+template<>
 Storage<char*>::~Storage()
 {
-    delete[] m_val;
+	delete[] m_val;
+}
+template<> 
+void Storage<char*>::prt()
+{
+    int i = 0;
+    while(m_val[i] != '\0')
+         std::cout << m_val[i++];
 }
 
 void test05()
@@ -218,6 +309,37 @@ void test05()
     storage.prt(); // This will print garbage
 }
 
+void test08()
+{
+    // Declare a non-pointer Storage to show it works
+	Storage<int> myint(5);
+	myint.prt();
+ 
+	// Declare a pointer Storage to show it works
+	int x = 7;
+	Storage<int*> myintptr(&x);
+ 
+	// If myintptr did a pointer assignment on x,
+	// then changing x will change myintptr too
+	x = 9;
+	myintptr.prt();
+ 
+	// Dynamically allocate a temporary string
+	//char *name = new char[40]{ "Alex" }; // requires C++14
+ 
+	// If your compiler isn't C++14 compatible, comment out the above line and uncomment these
+	char *name = new char[40];
+	strcpy(name, "Alex");
+ 
+	// Store the name
+	Storage< char*> myname(name);
+ 
+	// Delete the temporary string
+	delete[] name;
+ 
+	// Print out our name
+	myname.prt();
+}
 //6
 template<class CType,int size>
 class Storarray

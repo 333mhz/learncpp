@@ -9,6 +9,7 @@
             "command": "g++",
             "args": [
                 "-g",
+                "-std=c++14",
                 "${file}",
                 "-o",
                 "${fileDirname}\\..\\bin\\${fileBasenameNoExtension}.exe"

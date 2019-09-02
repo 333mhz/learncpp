@@ -1,6 +1,8 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+#define __STDC_WANT_LIB_EXT1__ 0
+
 #include <iostream>
 #include <chrono>
 #include <array>
@@ -11,9 +13,10 @@
 #include <ctime>
 #include <cstdlib>
 #include <cassert> // for assert()
-#include <cstring> // for strlen()
+#include <cstring> // for strlen() strcpy_s()
 #include <initializer_list> // for std::initializer_list
 #include <functional> // for std::reference_wrapper
+#include <string.h>
 
 using namespace std;
 
