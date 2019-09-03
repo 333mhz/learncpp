@@ -17,6 +17,8 @@
 #include <initializer_list> // for std::initializer_list
 #include <functional> // for std::reference_wrapper
 #include <string.h>
+#include <exception> // for std::exception
+#include <stdexcept> // for std::runtime_error
 
 using namespace std;
 
