@@ -413,6 +413,70 @@ void test06()
         std::cout << (boolStorage.get(count) ? "true" : "false") << '\n';
 }
 
-// 7
+// quiz
 
+template<class CT1>
+class Pair1
+{
+    private:
+    CT1 m_1st;
+    CT1 m_2nd;
+
+    public:
+    Pair1(const CT1& x,const CT1& y):m_1st(x),m_2nd(y)
+    {
+    }
+
+    const CT1& first()const {return m_1st;}
+    const CT1& second()const {return m_2nd;}
+};
+template<class CT1,class CT2>
+class Pair
+{
+    protected:
+    CT1 m_1st;
+    CT2 m_2nd;
+
+    public:
+    Pair(const CT1& x,const CT2& y):m_1st(x),m_2nd(y)
+    {
+    }
+
+    const CT1& first()const {return m_1st;}
+    const CT2& second()const {return m_2nd;}
+};
+template<class CT2>
+class StrValPair:public Pair<string,CT2>
+{
+    public:
+    StrValPair(const string& x,const CT2& y):Pair<string,CT2>(x,y)
+    {
+    }
+
+    const string& first()const {return Pair<string,CT2>::m_1st;}
+    const CT2& second()const {return Pair<string,CT2>::m_2nd;}
+};
+
+void quiz1()
+{
+    Pair1<int> p1(5, 8);
+	std::cout << "Pair: " << p1.first() << ' ' << p1.second() << '\n';
+ 
+	const Pair1<double> p2(2.3, 4.5);
+	std::cout << "Pair: " << p2.first() << ' ' << p2.second() << '\n';
+
+}
+void quiz2()
+{
+    Pair<int, double> p1(5, 6.7);
+	std::cout << "Pair: " << p1.first() << ' ' << p1.second() << '\n';
+ 
+	const Pair<double, int> p2(2.3, 4);
+	std::cout << "Pair: " << p2.first() << ' ' << p2.second() << '\n';
+}
+void quiz3()
+{
+    StrValPair<int> svp("Hello", 5);
+	std::cout << "Pair: " << svp.first() << ' ' << svp.second() << '\n';
+}
 #endif

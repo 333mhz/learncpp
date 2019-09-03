@@ -1,7 +1,7 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-#define __STDC_WANT_LIB_EXT1__ 0
+#define __STDC_WANT_LIB_EXT1__ 1
 
 #include <iostream>
 #include <chrono>
