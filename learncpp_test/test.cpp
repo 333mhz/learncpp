@@ -5,7 +5,7 @@ int main()
 {
     Timer t;
 
-    test051();
+    test07();
 
     std::cout <<std::endl << t.elapsed();
 

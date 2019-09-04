@@ -129,4 +129,90 @@ void test052()
 {
     
 }
+
+//6
+class Base6
+{
+public:
+    Base6() {}
+    virtual void print() { std::cout << "Base"; }
+};
+ 
+class Derived6: public Base6
+{
+public:
+    Derived6() {}
+    virtual void print() { std::cout << "Derived"; }
+};
+ 
+void test06()
+{
+    try
+    {
+        try
+        {
+            throw Derived6();
+        }
+        catch (Base6& b)
+        {
+            std::cout << "Caught Base b, which is actually a ";
+            b.print();
+            std::cout << "\n";
+            //throw b;// b get sliced
+            throw; // note: We're now rethrowing the object here
+        }
+    }
+    catch (Base6& b)
+    {
+        std::cout << "Caught Base b, which is actually a ";
+        b.print();
+        std::cout << "\n";
+    }
+}
+
+//7
+class A7
+{
+private:
+	int m_x;
+public:
+	A7(int x) : m_x(x)
+	{
+		//if (x <= 0)
+		//	throw 1;
+	}
+};
+ 
+class B7 : public A7
+{
+public:
+	B7(int x) try : A7(x) // note addition of try keyword here
+	{
+        if (x <= 0)
+			throw 1;
+	}
+	catch (...) // note this is at same level of indentation as the function itself
+	{
+                // Exceptions from member initializer list or constructor body are caught here
+ 
+                std::cerr << "Exception caught\n";
+ 
+                // If an exception isn't explicitly thrown here, the current exception will be implicitly rethrown
+	}
+};
+
+void test07()
+{
+    try
+	{
+		B7 b(0);
+	}
+	catch (int)
+	{
+		std::cout << "Oops\n";
+	}
+}
+
+//8
+
 #endif
