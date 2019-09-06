@@ -1,13 +1,21 @@
 #include "header.h"
-#include "exception.hpp"
+#include "smartptr.hpp"
 
 int main()
 {
     Timer t;
 
-    test07();
+    try
+    {
+        test010();
+    }
+    catch(...)
+    {
+        std::cerr << "Oops,unexpected error occured." << '\n';
+    }
+    
 
-    std::cout <<std::endl << t.elapsed();
+    std::cout <<std::endl <<"Time: "<< t.elapsed();
 
     return 0;
 }

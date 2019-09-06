@@ -215,4 +215,37 @@ void test07()
 
 //8
 
+// quiz
+class Fraction
+{
+    private:
+    int m_nume = 0;
+    int m_deno = 1;
+
+    public:
+    Fraction(int nume,int deno):m_nume(nume),m_deno(deno)
+    {
+        if(deno == 0)
+            throw std::runtime_error("Invail Denominator!");
+    }
+};
+
+void quiz8()
+{
+    try
+    {
+        int deno,nume;
+        cout << "Enter the numerator:\a";
+        cin >> nume;
+        cout << "Enter the denominator:\a";
+        cin >> deno;
+        Fraction(nume,deno);
+    }
+    catch(std::exception &e)
+    {
+        
+        cout << "Error:"<<e.what()<<endl;
+    }
+}
+
 #endif
