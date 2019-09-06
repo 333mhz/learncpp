@@ -94,8 +94,25 @@ void test03()
     std::cout << "End main\n";
 }
 
+//4
+
+void test04()
+{
+    std::cout << "Enter a number: \a";
+    double x;
+    std::cin >> x;
+    try // Look for exceptions that occur within try block and route to attached catch block(s)
+    {
+        double d = mySqrt(x);
+        std::cout << "The sqrt of " << x << " is " << d << '\n';
+    }
+    catch (...) // catch exceptions of type const char*
+    {
+        std::cerr << "Unexpected Error! " << std::endl;
+    }
+}
 //5
-void test05()
+void test050()
 {
     try
 	{
