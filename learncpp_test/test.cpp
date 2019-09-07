@@ -7,7 +7,8 @@ int main()
 
     try
     {
-        test010();
+        test072();
+        
     }
     catch(...)
     {

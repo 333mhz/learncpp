@@ -19,6 +19,8 @@
 #include <string.h>
 #include <exception> // for std::exception
 #include <stdexcept> // for std::runtime_error
+#include <utility> // for std::move
+#include <memory> //for std::unique_ptr
 
 using namespace std;
 
