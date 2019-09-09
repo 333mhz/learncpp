@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <cmath>
 #include <string>
+#include <sstream>
 #include <ctime>
 #include <cstdlib>
 #include <cassert> // for assert()
@@ -21,7 +22,8 @@
 #include <stdexcept> // for std::runtime_error
 #include <utility> // for std::move
 #include <memory> //for std::unique_ptr
-
+#include <iomanip>
+#include <cctype>
 using namespace std;
 
 const int g_arrayElements = 10000;

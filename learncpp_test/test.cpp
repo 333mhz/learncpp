@@ -1,5 +1,5 @@
 #include "header.h"
-#include "smartptr.hpp"
+#include "IOstream.hpp"
 
 int main()
 {
@@ -7,8 +7,9 @@ int main()
 
     try
     {
-        test072();
-        
+
+        test180301();
+            
     }
     catch(...)
     {
