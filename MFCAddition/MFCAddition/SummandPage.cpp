@@ -34,13 +34,15 @@ END_MESSAGE_MAP()
 // CSummandPage 消息处理程序
 
 
-BOOL CSummandPage::OnSetActive()
-{
-	// TODO:  在此添加专用代码和/或调用基类
+//BOOL CSummandPage::OnSetActive()
+//{
+//	// TODO:  在此添加专用代码和/或调用基类
+//
+//	// 获得父窗口，即属性表CPropertySheet类   
+//	CPropertySheet* psheet = (CPropertySheet*)GetParent();
+//	// 设置属性表只有“下一步”按钮   
+//	psheet->SetWizardButtons(PSWIZB_NEXT);
+//	return CPropertyPage::OnSetActive();
+//}
 
-	// 获得父窗口，即属性表CPropertySheet类   
-	CPropertySheet* psheet = (CPropertySheet*)GetParent();
-	// 设置属性表只有“下一步”按钮   
-	psheet->SetWizardButtons(PSWIZB_NEXT);
-	return CPropertyPage::OnSetActive();
-}
+

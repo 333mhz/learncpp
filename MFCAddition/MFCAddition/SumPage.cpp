@@ -34,23 +34,23 @@ END_MESSAGE_MAP()
 // CSumPage 消息处理程序
 
 
-BOOL CSumPage::OnSetActive()
-{
-	// TODO:  在此添加专用代码和/或调用基类
+//BOOL CSumPage::OnSetActive()
+//{
+//	// TODO:  在此添加专用代码和/或调用基类
+//
+//	// 获得父窗口，即属性表CPropertySheet类   
+//	CPropertySheet* psheet = (CPropertySheet*)GetParent();
+//	//设置属性表只有“完成”按钮   
+//	psheet->SetFinishText(_T("完成"));
+//	return CPropertyPage::OnSetActive();
+//}
 
-	// 获得父窗口，即属性表CPropertySheet类   
-	CPropertySheet* psheet = (CPropertySheet*)GetParent();
-	//设置属性表只有“完成”按钮   
-	psheet->SetFinishText(_T("完成"));
-	return CPropertyPage::OnSetActive();
-}
-
-BOOL CSumPage::OnWizardFinish()
-{
-	// TODO: Add your specialized code here and/or call the base class  
-
-	// 提示向导完成   
-	MessageBox(_T("使用说明向导已阅读完！"));
-
-	return CPropertyPage::OnWizardFinish();
-}
+//BOOL CSumPage::OnWizardFinish()
+//{
+//	// TODO: Add your specialized code here and/or call the base class  
+//
+//	// 提示向导完成   
+//	MessageBox(_T("使用说明向导已阅读完！"));
+//
+//	return CPropertyPage::OnWizardFinish();
+//}

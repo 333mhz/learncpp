@@ -34,9 +34,9 @@ END_MESSAGE_MAP()
 // CAddendPage 消息处理程序
 
 
-BOOL CAddendPage::OnSetActive()
-{
-	// TODO:  在此添加专用代码和/或调用基类
-
-	return CPropertyPage::OnSetActive();
-}
+//BOOL CAddendPage::OnSetActive()
+//{
+//	// TODO:  在此添加专用代码和/或调用基类
+//
+//	return CPropertyPage::OnSetActive();
+//}

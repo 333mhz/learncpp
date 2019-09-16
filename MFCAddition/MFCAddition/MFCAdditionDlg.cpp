@@ -189,9 +189,9 @@ void CMFCAdditionDlg::OnBnClickedAdd()
 void CMFCAdditionDlg::OnBnClickedInstructButton()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	CSumSheet sheet(_T(""));
+	CSumSheet sheet(_T("Instruction"));
 
-	sheet.SetWizardMode();
+	//sheet.SetWizardMode();
 
 	sheet.DoModal();
 }
