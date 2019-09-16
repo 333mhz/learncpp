@@ -8,6 +8,10 @@
 #include <chrono>
 #include <array>
 #include <vector>
+#include <deque>
+#include <list>
+#include <set>
+#include <map>
 #include <algorithm>
 #include <cmath>
 #include <string>

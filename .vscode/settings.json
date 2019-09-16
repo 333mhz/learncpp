@@ -50,5 +50,8 @@
         "string": "cpp",
         "list": "cpp",
         "iomanip": "cpp"
+        "bit": "cpp",
+        "map": "cpp",
+        "set": "cpp"
     }
 }
