@@ -104,7 +104,7 @@ int abcthrow(int a,int b,int c)
     }
 }
 
-//1-
+//1-12
 template<class T> 
 bool make2dArray(T ** &x, int d1, int d2)
 {
@@ -122,9 +122,9 @@ bool make2dArray(T ** &x, int d1, int d2)
     {
         std::cerr << "Out of memory,fail to alloc 2D array" << '\n';
         return false;
-    }
-    
+    } 
 }
+
 template<class T> 
 bool make2dArray(T ** &x, int d1, int* &d2)
 {
@@ -171,6 +171,41 @@ bool change1dLength(T * &x, int d1,int nd1)
         return false;
     }  
 }
+
+//1-14
+template<class T> 
+bool change2dLength(T ** &x, int d1, int d2, int nd1 , int nd2)
+{
+    if(nd1 < 0 || nd2 < 0)
+        throw "illegalParameterValue: new length must be >= 0";
+        
+    try
+    {   
+        T** tmp = new T* [nd1];
+        for(int i = 0;i < nd1; ++i)
+            tmp[i] = new T[nd2];
+
+        int n1 = min(d1,nd1);
+        int n2 = min(d2,nd2);
+
+        for(int i = 0;i < n1; ++i)
+            copy(x[i],x[i]+n2, tmp[i]);
+
+        for(int i = 0;i < d1;++i)
+            delete[] x[i];
+        delete[] x;
+
+        x = tmp;
+
+        return true;
+    }
+    catch(bad_alloc)
+    {
+        std::cerr << "Out of memory,fail to change array 1d length" << '\n';
+        return false;
+    }  
+}
+
 int main()
 {
     /*
