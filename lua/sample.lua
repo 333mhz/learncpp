@@ -1,0 +1,1 @@
+testonly -- End of the sample.lua
