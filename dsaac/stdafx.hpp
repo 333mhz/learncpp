@@ -86,5 +86,18 @@ public:
 		return static_cast<int>(rand() * fraction * (m_max - m_min + 1) + m_min);
 	}
 };
+ class illegalParameterValue:public std::exception
+ {
+	private:
+	std::string m_error;
+	public:
+	illegalParameterValue(std::string e):m_error(e)
+	{
 
+	}
+
+	const char* what()const noexcept { 
+		 return m_error.c_str();
+	}
+ };
 #endif

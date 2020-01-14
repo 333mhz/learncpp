@@ -1,5 +1,6 @@
 #ifndef CXX_REVIEW
 #define CXX_REVIEW
+#include "stdafx.hpp"
 //1-1
 
 //1-2
@@ -109,6 +110,7 @@ int abcthrow(int a,int b,int c)
     {       
         throw (a < 0 || b < 0 || c < 0)? 1 : 2;
     }
+    return 0;
 }
 
 //1-11
@@ -243,17 +245,99 @@ struct USD
 */
 class currency
 {
+    friend istream& operator>>(ostream&,const currency&);
+    friend ostream& operator<<(ostream&,const currency&);
+
     private:
     signType m_sign;
     unsigned long m_dollar;
     unsigned int m_cent;
+    long amount;
 
     public:
-    currency():m_sign(plus), m_dollar(0), m_cent(0)
+    currency():m_sign(signType::plus), m_dollar(0), m_cent(0)
     {  }
+    currency(signType s, unsigned long d, unsigned int c):m_sign(s), m_dollar(d), m_cent(c)
+    {   if(m_cent >100)
+            throw illegalParameterValue("Cents should be < 100");
+        
+        if(m_sign == signType::plus)
+            amount = m_dollar*100+m_cent;
+        else
+            amount = -(m_dollar*100+m_cent);
+    }
     ~currency(){  }
 
-    void setValue(signType, unsigned long, unsigned int);
+    void setValue(signType s, unsigned long d, unsigned int c)
+    {  
+        if(c >=100)
+            throw illegalParameterValue("Cents should be < 100");
+            
+        if(s == signType::plus)
+            amount = d*100+c;
+        else
+            amount = -(d*100+c);
+    }
+
     void setValue(double);
+    signType getSign() const{
+        if(amount < 0) return signType::minus;
+        else return signType::plus;
+    }
+    unsigned long getDollars() const{
+        if(amount < 0 ) return (-amount)/100;
+        else return amount/100;
+    }
+    unsigned int getCents() const{
+        if(amount < 0) return (-amount)-getDollars()*100;
+        else return amount-getDollars()*100;
+    }
+    currency operator+(const currency& x) const{
+        currency result;
+        result.amount = this->amount + x.amount;
+        return result;
+    }
+    currency& operator+=(const currency& x){
+        this->amount += x.amount;return *this;
+    }
+    void output(ostream& out)const{
+        long theAmount = this->amount;
+        if(theAmount < 0){
+            out << '-';
+            theAmount = - this->amount;
+        }
+        long dollars = theAmount/100;
+        int cents = theAmount - dollars*100;
+        if(cents <10)
+            out <<'$'<<dollars<<".0"<<cents<<std::endl;
+        else
+            out <<'$'<<dollars<<'.'<<cents<<std::endl;
+    }
 };
+    ostream& operator<<(ostream& out,const currency& x){
+        x.output(out); return out;
+    }
+
+//recursive
+
+int rFactorial(int n){
+    std::cout<<"In:"<<n<<std::endl;
+    if(n<=1){
+        std::cout<<"1.Fin"<<std::endl;
+        return 1;
+    }
+    else{
+        int r = n*rFactorial(n-1);
+        std::cout<<"Re:"<<r<<std::endl;
+        return r;
+    } 
+}
+
+template<class T>
+T rSum(T a[],int n){
+    if(n >0)
+        return rSum(a,n-1)+a[n-1];
+    
+    return 0;
+}
 #endif 
