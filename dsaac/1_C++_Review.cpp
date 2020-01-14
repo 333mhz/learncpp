@@ -3,7 +3,7 @@
 
 int main()
 {
-    double d[10]{1,2,3,4,5,6,7,8,9,10};
-    std::cout<<rSum(d,10);
+    double d[10]{14,1,6,3,8,29,2,9,11,5};
+    permutations(d,2,9);
     return 0;
 }
