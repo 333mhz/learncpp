@@ -15,7 +15,7 @@
                 "${fileDirname}\\..\\bin\\${fileBasenameNoExtension}.exe"
             ],
             "options": {
-                "cwd": "F:\\MinGW\\bin"
+                "cwd": "G:\\MinGW\\bin"
             },
             "problemMatcher": [
                 "$gcc"

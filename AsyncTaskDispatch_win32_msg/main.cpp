@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
     
     tt = std::move(t);
     }*/
-    echo(int)((0.1 + 0.8) * 10);
+
     return 0;
 
 }

@@ -340,22 +340,35 @@ T rSum(T a[],int n){
     
     return 0;
 }
-
+//1-32
 template<class T>
 void permutations(T list[],int k,int m)
 {
     if(k == m){
-        copy(list ,list + m+1,ostream_iterator<T>(cout,""));
-        cout << endl;    
+        copy(list ,list + m+1,ostream_iterator<T>(cout,","));
+        std::cout << endl;    
     }
     else{
         for(int i = k; i<= m;i++)
         {
-            swap(list[k],list[i])
+            swap(list[k],list[i]);
             permutations(list,k+1,m);
             swap(list[k],list[i]);
         }
     }
 }
 
+//1e19
+//1 1 2 3 5 8 13 21 34 55 
+//f n = 
+int fib(int n)
+{
+    if(n<=2)
+    {
+        return 1;
+    }
+    else {
+        return fib(n-1)+fib(n-2);
+    }
+}
 #endif 

@@ -3,7 +3,8 @@
 
 int main()
 {
-    double d[10]{14,1,6,3,8,29,2,9,11,5};
-    permutations(d,2,9);
+    double d[4]{2,1,3,4};
+    for(int i=1;i<10;i++)
+        cout << fib(i)<<endl;
     return 0;
 }
