@@ -399,10 +399,11 @@ bool isFound(T* a, T x,int n)
     else
         return isFound(a, x,n - 1);  
 }
-
+//https://blog.csdn.net/a7055117a/article/details/48391923
 template<class T>
-T** subsetGen(T* a)
+void subsetGen(T* a, int n, int cur)
 {
-    
+    if(cur == 0)
+        
 }
 #endif 
