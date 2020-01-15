@@ -3,8 +3,7 @@
 
 int main()
 {
-    double d[4]{2,1,3,4};
-    for(int i=1;i<10;i++)
-        cout << fib(i)<<endl;
+    int a[3]{1,2,3};
+    cout<<isFound(a,5,3) <<endl;
     return 0;
 }

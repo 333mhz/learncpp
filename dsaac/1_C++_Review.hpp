@@ -371,4 +371,38 @@ int fib(int n)
         return fib(n-1)+fib(n-2);
     }
 }
+
+int isOddEven(int n)
+{
+
+    if(n<=0)
+        return 0;
+
+    if(n%2 == 0)
+    {
+        return 2;
+    }
+    else if(isOddEven(3*n+1) == 2)
+    {
+       return 1;
+    }
+    return 0;
+}
+
+template<class T>
+bool isFound(T* a, T x,int n)
+{
+    if(n == 0)
+        return false;
+    else if(a[n-1] == x)
+        return true;
+    else
+        return isFound(a, x,n - 1);  
+}
+
+template<class T>
+T** subsetGen(T* a)
+{
+    
+}
 #endif 
