@@ -3,7 +3,10 @@
 
 int main()
 {
-    int a[3]{1,2,3};
-    cout<<isFound(a,5,3) <<endl;
+    //int a[3]={4,6,8};
+    //prtSubset(a,NULL,0,3);
+    for(int i=0;i<(1<<3);i++)
+        prtSubsetB(3,i);
+
     return 0;
 }

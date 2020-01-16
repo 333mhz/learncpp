@@ -399,11 +399,51 @@ bool isFound(T* a, T x,int n)
     else
         return isFound(a, x,n - 1);  
 }
+
 //https://blog.csdn.net/a7055117a/article/details/48391923
+//recursve????
 template<class T>
-void subsetGen(T* a, int n, int cur)
+int prtSubset(T *A, bool *B, int cur,int n)
 {
-    if(cur == 0)
-        
+    if(B == NULL)
+    {   
+        cout << "/0"<<endl;
+        B = new bool[n];
+    }    
+
+    if(cur==n)//当设置完布尔数组内的全部元素后输出
+    {
+        for(int i = 0; i<n;i++)
+        {
+            if(B[i] == true)
+                cout << A[i];
+        }
+        cout << endl;
+    }
+    else
+    {
+        B[cur] = true;//选第cur个元素
+        prtSubset(A,B,cur + 1,n);
+        B[cur] = false;//不选第cur个元素
+        prtSubset(A,B,cur + 1,n);
+    }
+    
+    return 0;
 }
+
+void prtSubsetB(int n,int s)//输出子集s包含的元素
+{
+    int n;
+ 
+    char buf[50];
+ 
+    printf("请输入一个整数：");
+    scanf("%d", &n);
+ 
+    itoa(n, buf, 2);
+ 
+    printf("二进制：%s\n", buf);
+
+}
+
 #endif 
