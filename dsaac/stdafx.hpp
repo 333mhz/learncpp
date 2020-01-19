@@ -3,34 +3,35 @@
 
 //#define __STDC_WANT_LIB_EXT1__ 1
 
-#include <fstream>
-#include <iostream>
-#include <chrono>
-#include <iterator>
-#include <array>
-#include <vector>
-#include <deque>
-#include <list>
-#include <set>
-#include <map>
 #include <algorithm>
-#include <cmath>
-#include <string>
-#include <sstream>
-#include <ctime>
-#include <cstdlib>
+#include <array>
 #include <cassert> // for assert()
-#include <cstring> // for strlen() strcpy_s()
-#include <initializer_list> // for std::initializer_list
-#include <functional> // for std::reference_wrapper
-#include <string.h>
-#include <exception> // for std::exception
-#include <stdexcept> // for std::runtime_error
-#include <utility> // for std::move
-#include <memory> //for std::unique_ptr
-#include <iomanip>
 #include <cctype>
+#include <chrono>
+#include <cmath>
 #include <conio.h>
+#include <cstdlib>
+#include <cstring> // for strlen() strcpy_s()
+#include <ctime>
+#include <deque>
+#include <exception> // for std::exception
+#include <fstream>
+#include <functional> // for std::reference_wrapper
+#include <initializer_list> // for std::initializer_list
+#include <iostream>
+#include <iomanip>
+#include <iterator>
+#include <list>
+#include <map>
+#include <memory> //for std::unique_ptr
+#include <numeric>
+#include <set>
+#include <sstream>
+#include <string>
+#include <stdexcept> // for std::runtime_error
+#include <string.h>
+#include <utility> // for std::move
+#include <vector>
 
 using namespace std;
 

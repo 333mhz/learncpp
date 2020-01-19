@@ -3,10 +3,7 @@
 
 int main()
 {
-    //int a[3]={4,6,8};
-    //prtSubset(a,NULL,0,3);
-    for(int i=0;i<(1<<3);i++)
-        prtSubsetB(3,i);
-
+    int a[3]={4,6,8};
+    npermutations(a,0,2);
     return 0;
 }

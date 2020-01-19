@@ -431,19 +431,90 @@ int prtSubset(T *A, bool *B, int cur,int n)
     return 0;
 }
 
-void prtSubsetB(int n,int s)//输出子集s包含的元素
+void prtSubsetB(bool *B,int n,int s)
 {
-    int n;
- 
-    char buf[50];
- 
-    printf("请输入一个整数：");
-    scanf("%d", &n);
- 
-    itoa(n, buf, 2);
- 
-    printf("二进制：%s\n", buf);
+     if(B == NULL)
+    {   
+        B = new bool[n];
+    }    
 
+    if(s == n)//当设置完布尔数组内的全部元素后输出
+    {
+        for(int i = 0; i<n;i++)
+        {
+            if(B[i] == true)
+                cout << 1;
+            else
+                cout<<0;
+            
+        }
+        cout << endl;
+    }
+    else
+    {
+        B[s] = true;//选第cur个元素
+        prtSubsetB(B,n,s + 1);
+        B[s] = false;//不选第cur个元素
+        prtSubsetB(B,n,s + 1);
+    }
+    
+    return;
+}
+void prtSubsetB2(int n)//输出子集s包含的元素
+{
+    for(int s=0;s<(1<<n);s++)
+    {   
+        for(int i=0;i<n;i++)
+        {
+            //<<把一个整型数的所有位向左移动指定的位数，移动到左边界之外的多余二进制位会被丢弃，并从右边界移入0
+            if(s&(1<<i))//从最右侧开始遍历s中是否含有相应的元素
+                cout << 1;
+            else
+                cout << 0;         
+        }
+        cout << endl;
+    }
+}
+
+void greyflip(int n)
+{
+    if(n == 1)
+        cout << 1;
+    else
+    {
+        greyflip(n-1);
+        cout << n;
+        greyflip(n-1);
+    }
+    
+}
+
+void greycode(int n)
+{
+
+}
+
+//STL
+template<typename T>
+T sum(T a[], int n)
+{
+    T tsum = 0;
+    return accumulate(a,a+n,tsum);
+}
+template<typename T>
+T product(T a[],int n)
+{
+    T theProduct = 1;
+    return accumulate(a,a+n,theProduct,multiplies<T>());
+}
+
+template<typename T>
+void npermutations(T list[],int k,int m)
+{
+    do{
+        copy(list ,list+m+1,ostream_iterator<T>(cout,""));
+        cout << endl;
+    }while (next_permutation(list,list+m+1));
 }
 
 #endif 
